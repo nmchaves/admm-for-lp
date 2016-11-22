@@ -1,11 +1,17 @@
 m = 20; % # of constraints
 n = 100; % # of equations
 
-% Tolerance (for stopping condition)
-tol = 1e-3;
+% Maximum # of iterations to run
+MAX_ITER = 1e3;
+
+% Tolerance (stop early if the error is less than this)
+TOL = 1e-3;
 
 % Beta parameter (for augmenting lagrangian)
 beta = rand();  % random between 0 and 1
+
+% Cost (must be nonnegative)
+c = rand(n,1);
 
 A = randn(m, n);
 b = randn(m,1);
@@ -16,21 +22,20 @@ y = zeros(m,1);
 % Initialize s
 s = ones(n, 1);
 
-% Initialize x1. TODO: init correctly
-x1 = zeros(n, 1);
+% Initialize x1 randomly (doesn't need to be positive).
+x1 = randn(n, 1);
 
-% Initialize x2. TODO: init correctly
-x2 = zeros(n, 1);
+% Initialize x2 randomly (must be nonnegative). 
+x2 = rand(n, 1);
 
 ATA_plus_I_inv = inv(A'*A + eye(size(A,2)));
 
-iter = 0;
-err = inf; % TODO: compute error
+ % history of errors at each iteration
+error_history = [];
 
-while err > tol
-    
+for i=1:MAX_ITER
     % x1 update
-    x1 = ATA_plus_I_inv * ((1/b)*A'*y + (1/beta)*s - (1/beta)*c + A'*b + x2);
+    x1 = ATA_plus_I_inv * ((1/beta)*A'*y + (1/beta)*s - (1/beta)*c + A'*b + x2);
 
     % x2 update
     x2 = max(x1 - (1/beta)*s, 0);
@@ -41,11 +46,22 @@ while err > tol
     % s update
     s = s - beta * (x1 - x2);
     
-    % update error. TODO
-    err = 0;
+    abs_err = norm(A*x1 - b);
+    error_history = [error_history abs_err];
     
-    iter = iter + 1;
+    % Early stopping condition
+    if abs_err < TOL
+        fprintf('Converged at step %d \n', i)
+        break
+    end
+    
 end
 
+figure(1)
+plot(error_history)
+xlabel('Iteration')
+ylabel('Abs Error: Norm(A*x1-b)')
 
-
+% Optimal Objective value
+opt_obj = c' * x1;
+fprintf('Optimal Objective Value: %f \n', opt_obj)
