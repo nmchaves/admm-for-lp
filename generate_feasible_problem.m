@@ -1,11 +1,12 @@
-clear; clc; close all;
-rng('default') % random seed for re-producability
+% clear; clc; close all;
 % 
 % minimize t(c) * x
 % subject to: 
 %   A * x = b
 %   x >= 0
 %
+
+rng('default') % random seed for re-producability
 
 %% Paramter Setting
 m = 20;  % # of constraint
