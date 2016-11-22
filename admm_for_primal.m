@@ -13,6 +13,9 @@ precondition = false;
 % Tolerance (stop early if the error is less than this)
 TOL = 1e-3;
 
+% random seed for re-producability
+rng('default')
+
 % Beta parameter (for augmenting lagrangian). Set randomly between 0 and 1
 beta = rand();  
 
