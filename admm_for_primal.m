@@ -1,20 +1,30 @@
-m = 20; % # of constraints
-n = 100; % # of equations
+% # of constraints
+m = 20; 
+
+% # of equations
+n = 100; 
 
 % Maximum # of iterations to run
 MAX_ITER = 1e3;
 
+% Whether or not to apply preconditioning to A and b
+precondition = false;
+
 % Tolerance (stop early if the error is less than this)
 TOL = 1e-3;
 
-% Beta parameter (for augmenting lagrangian)
-beta = rand();  % random between 0 and 1
+% Beta parameter (for augmenting lagrangian). Set randomly between 0 and 1
+beta = rand();  
 
 % Cost (must be nonnegative)
 c = rand(n,1);
 
 A = randn(m, n);
 b = randn(m,1);
+
+if precondition
+    AAT_inv_sqrt = sqrt(inv(A * A')) * A;
+end
 
 % Initialize y
 y = zeros(m,1);
