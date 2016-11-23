@@ -8,8 +8,8 @@ rng('default') % random seed for re-producability
 %
 
 %% Paramter Setting
-m = 20;  % # of constraint
-n = 30; % # of equations
+m = 20;  % # of equations
+n = 30; % # of constraints
 c = rand(n,1);  % so the problem is bounded
 A = randn(m, n);
 x0 = rand(n,1); % non-negative
