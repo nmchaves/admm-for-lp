@@ -6,7 +6,7 @@
 %   x >= 0
 %
 
-rng('default') % random seed for re-producability
+% rng('default') % random seed for re-producability
 
 %% Paramter Setting
 m = 20;  % # of constraint

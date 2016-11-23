@@ -12,14 +12,18 @@ MAX_ITER = 1e3; % max # of iterations
 TOL = 1e-4;     % Tolerance
 beta = 0.9;     % parameter (for augmenting lagrangian)
 % beta = rand(); 
-
 precondition = false;
 
 %% solve problem with ADMM
 error_history = [];
+
 if precondition
-    A = sqrt(inv(A * A')) * A;
-    b = sqrt(inv(A * A')) * b;
+    disp(norm(A * x + b))
+    disp('Using pre-conditioning')
+    eig(sqrtm(inv(A * A')))
+    A = sqrtm(inv(A * A')) * A;
+    b = sqrtm(inv(A * A')) * b;
+    disp(norm(A * x + b))
 end
 
 AAt_inv = inv(A * A');
