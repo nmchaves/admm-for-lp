@@ -21,8 +21,9 @@ if precondition
     disp(norm(A * x + b))
     disp('Using pre-conditioning')
     eig(sqrtm(inv(A * A')))
-    A = sqrtm(inv(A * A')) * A;
+    AAT_inv_sqrt = sqrtm(inv(A * A')) * A;
     b = sqrtm(inv(A * A')) * b;
+    A = AAT_inv_sqrt;
     disp(norm(A * x + b))
 end
 
