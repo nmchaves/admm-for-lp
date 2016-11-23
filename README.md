@@ -18,7 +18,11 @@ admm_for_dual.m
 ```
 
 ```
-admm_barrier.m
+admm_primal_barrier.m
+```
+
+```
+admm_dual_barrier.m
 ```
 
 ## References
