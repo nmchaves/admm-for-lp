@@ -12,6 +12,8 @@ s = ones(n, 1);
 MAX_ITER = 1e3; % max # of iterations
 TOL = 1e-4;     % Tolerance
 beta = 0.9;     % parameter (for augmenting lagrangian)
+mu = 1;
+gamma = 0.1;
 % beta = rand(); 
 precondition = false;
 
@@ -31,11 +33,15 @@ AAt_inv = inv(A * A');
 for i=1:MAX_ITER
     % update equations
     y = AAt_inv * (-A * (s - c) + 1/beta * (A * x + b));
-    s = c - A' * y + 1/beta * x;
-    s = s .* (s > 0); 
+    % s = c - A' * y + 1/beta * x;
+    % s = s .* (s > 0); 
+    cAy = c - A' * y;
+    s = 1/(2*beta) * (beta*cAy + x + sqrt(beta^2*cAy.^2 + 2*beta*cAy.*x + 4*beta*mu + x.^2));
+    
     x = x - beta * (A' * y + s - c);
-    % compute error for feasibility
-    % abs_err = norm(A' * y + s - c);
+    
+    mu = gamma * mu;
+    
     abs_err = norm(A * x + b);
     error_history = [error_history abs_err];
     % early stopping condition
