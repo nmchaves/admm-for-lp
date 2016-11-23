@@ -4,7 +4,7 @@ rng(0)
 generate_feasible_problem
 
 %% initializtion
-x = - x0;
+x = - rand(n, 1);
 y = zeros(m,1);
 s = ones(n, 1);
 
