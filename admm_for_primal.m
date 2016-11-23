@@ -1,20 +1,11 @@
+% random seed for re-producability
+rng('default')
+
 % # of constraints
 m = 20; 
 
 % # of equations
 n = 100; 
-
-% Maximum # of iterations to run
-MAX_ITER = 1e3;
-
-% Whether or not to apply preconditioning to A and b
-precondition = false;
-
-% Tolerance (stop early if the error is less than this)
-TOL = 1e-3;
-
-% random seed for re-producability
-rng('default')
 
 % Beta parameter (for augmenting lagrangian). Set randomly between 0 and 1
 beta = rand();  
@@ -25,8 +16,19 @@ c = rand(n,1);
 A = randn(m, n);
 b = randn(m,1);
 
+% Maximum # of iterations to run
+MAX_ITER = 1e3;
+
+% Whether or not to apply preconditioning to A and b
+precondition = true;
+
+% Tolerance (stop early if the error is less than this)
+TOL = 1e-3;
+
 if precondition
     AAT_inv_sqrt = sqrt(inv(A * A')) * A;
+    b = sqrt(inv(A * A')) * b;
+    A = AAT_inv_sqrt;
 end
 
 % Initialize y
