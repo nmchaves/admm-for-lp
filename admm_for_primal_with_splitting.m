@@ -7,6 +7,9 @@ m = 20;
 % # of constraints
 n = 100; 
 
+% Number of blocks to split the problem into
+NUM_BLOCKS = 2;
+
 % Beta parameter (for augmenting lagrangian). Set randomly between 0 and 1
 beta = rand();  
 
@@ -17,13 +20,13 @@ A = randn(m, n);
 b = randn(m,1);
 
 % Maximum # of iterations to run
-MAX_ITER = 1e4;
+MAX_ITER = 1e3;
 
 % Whether or not to apply preconditioning to A and b
 precondition = false;
 
 % Tolerance (stop early if the error is less than this)
-TOL = 1e-5;
+TOL = 1e-4;
 
 if precondition
     AAT_inv_sqrt = sqrt(inv(A * A')) * A;
@@ -32,7 +35,7 @@ if precondition
 end
 
 % Initialize y
-y = zeros(m,1);
+y = zeros(m, 1);
 
 % Initialize s
 s = ones(n, 1);
@@ -43,55 +46,73 @@ x1 = randn(n, 1);
 % Initialize x2 randomly (must be nonnegative). 
 x2 = rand(n, 1);
 
-% Split data into 2 blocks
-midpoint = floor(n/2);
-x1_1 = x1(1:midpoint);
-x1_2 = x1(midpoint+1:end);
-A_1 = A(:,1:midpoint);
-A_2 = A(:,midpoint+1:end);
-
-x2_1 = x2(1:midpoint);
-x2_2 = x2(midpoint+1:end);
-c_1 = c(1:midpoint);
-c_2 = c(midpoint+1:end);
-s_1 = s(1:midpoint);
-s_2 = s(midpoint+1:end);
+% Split data into blocks
+x1_blocks = splitMatIntoBlocks(x1, NUM_BLOCKS, 'vertical');
+A_blocks = splitMatIntoBlocks(A, NUM_BLOCKS, 'horizontal');
+x2_blocks = splitMatIntoBlocks(x2, NUM_BLOCKS, 'vertical');
+c_blocks = splitMatIntoBlocks(c, NUM_BLOCKS, 'vertical');
+s_blocks = splitMatIntoBlocks(s, NUM_BLOCKS, 'vertical');
 
 % Compute inverses on smaller matrices
-ATA_plus_I_inv_1 = inv(A_1'*A_1 + eye(size(A_1,2)));
-ATA_plus_I_inv_2 = inv(A_2'*A_2 + eye(size(A_2,2)));
+ATA_plus_I_inv_blocks = cell(NUM_BLOCKS, 1);
+for i=1:NUM_BLOCKS
+    A_cur = A_blocks{i};
+    ATA_plus_I_inv_blocks{i} = inv(A_cur'*A_cur + eye(size(A_cur,2)));
+end
 
-% Precompute matrix products
-A1TA2 = A_1' * A_2;
-A2TA1 = A_2' * A_1;
+% Precompute matrix products for each Ai, Aj block of A
+AiTAj_blocks = cell(NUM_BLOCKS^2, 1);
+for i=1:NUM_BLOCKS
+    A_i = A_blocks{i};
+    for j=1:NUM_BLOCKS
+        if i ~= j
+            A_j = A_blocks{j};
+            AiTAj_blocks{i,j} = A_i' * A_j;
+        end
+    end 
+end
 
 % history of errors at each iteration
 error_history = [];
 
 for i=1:MAX_ITER
     
-    % x1_1 update.
-    x1_1 = ATA_plus_I_inv_1 * ((1/beta)*A_1'*y + (1/beta)*s_1 - (1/beta)*c_1 + A_1'*b + x2_1 - A1TA2 * x1_2);
+    % Update each x1 block
+    for i=1:NUM_BLOCKS
+        A_cur = A_blocks{i};
+        
+        % Compute sum of cross terms
+        cross_terms_sum = zeros(size(x1_blocks{i}));
+        for j=1:NUM_BLOCKS
+            if i ~= j
+                cross_terms_sum = cross_terms_sum + AiTAj_blocks{i,j} * x1_blocks{j};
+            end
+        end
+        
+        x1_blocks{i} = ATA_plus_I_inv_blocks{i} * ((1/beta)*A_cur'*y + ...
+                   (1/beta)*s_blocks{i} - (1/beta)*c_blocks{i} + A_cur'*b + ...
+                   x2_blocks{i} - cross_terms_sum);
+    end
     
-    % x1_2 update. 
-    x1_2 = ATA_plus_I_inv_2 * ((1/beta)*A_2'*y + (1/beta)*s_2 - (1/beta)*c_2 + A_2'*b + x2_2 - A2TA1 * x1_1);
+    % update x2 1 block at a time
+    for i=1:NUM_BLOCKS
+        x2_blocks{i} = max(x1_blocks{i} - (1/beta)*s_blocks{i}, 0);
+    end
     
-    x1_full = [x1_1; x1_2];
+    % Update y using the new x1 blocks
+    Ax1 = zeros(size(y)); % A * x1 (needed for updating y)
+    for i=1:NUM_BLOCKS
+        Ax1 = Ax1 + A_blocks{i} * x1_blocks{i};
+    end
+    y = y - beta * (Ax1 - b);
     
-    % x2 update
-    x2 = max(x1_full - (1/beta)*s, 0);
-    x2_1 = x2(1:midpoint);
-    x2_2 = x2(midpoint+1:end);
+    % update s 1 block at a time
+    for i=1:NUM_BLOCKS
+        s_blocks{i} = s_blocks{i} - beta * (x1_blocks{i} - x2_blocks{i});
+    end
     
-    % y update
-    y = y - beta * (A * x1_full - b);
-    
-    % s update
-    s = s - beta * (x1_full - x2);
-    s_1 = s(1:midpoint);
-    s_2 = s(midpoint+1:end);
-    
-    abs_err = norm(A*x1_full - b);
+    % Compute error and update history
+    abs_err = norm(Ax1 - b);
     error_history = [error_history abs_err];
     
     % Early stopping condition
@@ -99,7 +120,6 @@ for i=1:MAX_ITER
         fprintf('Converged at step %d \n', i)
         break
     end
-    
 end
 
 figure(1)
@@ -108,5 +128,8 @@ xlabel('Iteration')
 ylabel('Abs Error: Norm(A*x1-b)')
 
 % Optimal Objective value
-opt_obj = c' * x1_full;
+opt_obj = 0;
+for i=1:NUM_BLOCKS
+    opt_obj = opt_obj + c_blocks{i}' * x1_blocks{i};
+end
 fprintf('Optimal Objective Value: %f \n', opt_obj)
