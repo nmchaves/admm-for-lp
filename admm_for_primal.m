@@ -66,7 +66,6 @@ for i=1:MAX_ITER
     
     % Early stopping condition
     if abs_err < TOL
-        fprintf('Converged at step %d \n', i)
         break
     end
     
