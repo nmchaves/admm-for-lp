@@ -8,7 +8,10 @@ m = 20;
 n = 100; 
 
 % Number of blocks to split the problem into
-NUM_BLOCKS = 2;
+NUM_BLOCKS = 6;
+
+% Whether or not to randomly permute the x1 update order
+rnd_permute_x1_update = false;
 
 % Beta parameter (for augmenting lagrangian). Set randomly between 0 and 1
 beta = rand();  
@@ -77,8 +80,17 @@ error_history = [];
 
 for i=1:MAX_ITER
     
+    % Determine the update order for the x1 blocks
+    if rnd_permute_x1_update
+        % Update in random order
+        x1_update_order = randperm(NUM_BLOCKS);
+    else
+        % Update in lexicographical order
+        x1_update_order = 1:NUM_BLOCKS;
+    end
+    
     % Update each x1 block
-    for i=1:NUM_BLOCKS
+    for i=x1_update_order
         A_cur = A_blocks{i};
         
         % Compute sum of cross terms
