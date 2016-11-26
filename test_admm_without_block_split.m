@@ -1,7 +1,9 @@
 clear;clc;close all
 seed = 0;
+
 %% generate problem
-[c, A, b] = generate_linprog_problem(100,200,0);
+prob_seed = 0;
+[c, A, b, opt_val] = generate_linprog_problem(100,200,prob_seed);
 
 %% parameters
 MAX_ITER = 1e4; % max # of iterations
@@ -33,4 +35,3 @@ precondition = false;
 
 %% Dual Interior Point ADMM Pre-conditioning
 [~,~,~,~,~] = lp_dual_ip_admm(c, A, b, MAX_ITER, TOL, beta, gamm, true, seed);
-

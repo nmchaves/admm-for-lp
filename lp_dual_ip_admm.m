@@ -1,18 +1,27 @@
-function [opt_val, x_opt, y_opt, s_opt, err_hist] = lp_dual_ip_admm(c, A, b, MAX_ITER, TOL, beta, gamma, precondition, seed)
+function [opt_val, x_opt, y_opt, s_opt, err_hist] = lp_dual_ip_admm(c, A, b, MAX_ITER, TOL, beta, gamma, precondition, seed, verbose)
 % admm_lp_primal  
 %
 %   See also SUM, PLUS.
 
-if (nargin ~= 9)
-    error('Wrong number of inputs');
-else
+switch nargin 
+    case 9
+        verbose = false;
+    case 10
+        verbose = true;
+    otherwise
+        error('Wrong number of inputs');
+end
+
+if verbose
     fprintf('------------------------------------------\n')
     fprintf('Solving LP with Dual Interior Point ADMM\n')
 end
 
 % preconditioning 
 if precondition
-    fprintf('NOTE: using pre-conditioning\n')
+    if verbose
+        fprintf('NOTE: using pre-conditioning\n')
+    end
     AAT_inv_sqrt = sqrtm(inv(A * A')) * A;
     b = sqrtm(inv(A * A')) * b;
     A = AAT_inv_sqrt;
@@ -42,7 +51,9 @@ for i=1:MAX_ITER
     abs_err = norm(A * x + b);
     error_history = [error_history abs_err];
     if abs_err < TOL
-        fprintf('Converged at step %d \n', i)
+        if verbose
+            fprintf('Converged at step %d \n', i)
+        end
         break
     end
 end
@@ -53,5 +64,7 @@ s_opt = s;
 
 opt_val = c' * x_opt;
 err_hist = error_history;
-fprintf('Optimal Objective Value: %f \n', opt_val)
+if verbose 
+    fprintf('Optimal Objective Value: %f \n', opt_val)
+end
 end
