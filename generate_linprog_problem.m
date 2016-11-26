@@ -1,4 +1,4 @@
-function [c, A, b] = generate_linprog_problem(m,n,seed)
+function [c, A, b, opt_val] = generate_linprog_problem(m,n,seed)
 %
 % minimize t(c) * x
 % subject to: 
