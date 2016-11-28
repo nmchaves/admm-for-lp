@@ -11,7 +11,7 @@ prob_seed = 0;
 MAX_ITER = 1e4; % max # of iterations
 TOL = 1e-4;     % Tolerance
 beta = 0.9;     % parameter (for augmenting lagrangian)
-precondition = false;
+precondition = true;
 
 %% Primal ADMM with 1 block (no splitting)
 NUM_BLOCKS = 1;
@@ -32,8 +32,10 @@ rnd_permute = true;
                                     precondition, NUM_BLOCKS, rnd_permute, seed);
 %% Plot 
                                 
-figure(1)
+figure(2)
 hold on
 plot(eh1, 'r')
-plot(eh2, 'b')
-plot(eh3, 'g')
+plot(eh2, 'g')
+plot(eh3, 'b')
+xlabel('Iteration')
+ylabel('Abs Error: ||A*x1-b||')

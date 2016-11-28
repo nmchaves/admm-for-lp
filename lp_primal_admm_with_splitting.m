@@ -4,9 +4,9 @@ function [ opt_val, x_opt, y_opt, s_opt, err_hist ] = lp_primal_admm_with_splitt
 [m, n] = size(A);
 
 if precondition
-    AAT_inv_sqrt = sqrt(inv(A * A')) * A;
-    b = sqrt(inv(A * A')) * b;
-    A = AAT_inv_sqrt;
+    AAT_inv_sqrt = sqrtm(inv(A * A'));
+    b = AAT_inv_sqrt * b;
+    A = AAT_inv_sqrt * A;
 end
 
 % random initilization
@@ -51,7 +51,7 @@ for i=1:NUM_BLOCKS
 end
 
 % history of errors at each iteration
-error_history = [];
+err_hist = [];
 
 for t=1:MAX_ITER
     
@@ -100,7 +100,7 @@ for t=1:MAX_ITER
     
     % Compute error and update history
     abs_err = norm(Ax1 - b);
-    error_history = [error_history abs_err];
+    err_hist = [err_hist abs_err];
     
     % Early stopping condition
     if abs_err < TOL
@@ -109,16 +109,11 @@ for t=1:MAX_ITER
     end
 end
 
-% Optimal Objective value
-opt_val = 0;
-for i=1:NUM_BLOCKS
-    opt_val = opt_val + c_blocks{i}' * x1_blocks{i};
-end
-
+% Return the optimal solution and objective value
 x_opt = cell2mat(x1_blocks);
+opt_val = c' * x_opt;
 y_opt = y;
 s_opt = cell2mat(s_blocks);
-err_hist = error_history;
 
 %if verbose
 %    fprintf('Optimal Objective Value: %f \n', opt_val)
