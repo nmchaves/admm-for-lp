@@ -1,41 +1,65 @@
 clear;clc;close all
-seed = 0;
-
 %% generate problem
-m = 100;
-n = 200;
+m = 20;
+n = 100;
 prob_seed = 0;
 [c, A, b, opt_val] = generate_linprog_problem(m, n , prob_seed);
+
 
 %% parameters
 MAX_ITER = 1e4; % max # of iterations
 TOL = 1e-4;     % Tolerance
 beta = 0.9;     % parameter (for augmenting lagrangian)
 precondition = true;
+seed = 0; % solver seed
 
-%% Primal ADMM with 1 block (no splitting)
-NUM_BLOCKS = 1;
-rnd_permute = true; % This would have no effect anyways
-[ov1,~,~,~,eh1] = lp_primal_admm_with_splitting(c, A, b, MAX_ITER, TOL, beta, ...
-                                    precondition, NUM_BLOCKS, rnd_permute, seed);
+N = 10; % # number of problems to solve
+corr_tol = 0.01; % Tolerance for correctness
+num_blocks_range = [1, 5, 10, 15, 20]; % # of blocks to use for each splitting experiment
+rnd_permute = true; % Whether or not to randomly permute the block update order
 
-%% Primal ADMM with 2 blocks
-NUM_BLOCKS = 2;
-rnd_permute = true;
-[ov2,~,~,~,eh2] = lp_primal_admm_with_splitting(c, A, b, MAX_ITER, TOL, beta, ...
-                                    precondition, NUM_BLOCKS, rnd_permute, seed);
-                                
-%% Primal ADMM with 3 blocks
-NUM_BLOCKS = 3;
-rnd_permute = true;
-[ov3,~,~,~,eh3] = lp_primal_admm_with_splitting(c, A, b, MAX_ITER, TOL, beta, ...
-                                    precondition, NUM_BLOCKS, rnd_permute, seed);
-%% Plot 
-                                
-figure(2)
-hold on
-plot(eh1, 'r')
-plot(eh2, 'g')
-plot(eh3, 'b')
-xlabel('Iteration')
-ylabel('Abs Error: ||A*x1-b||')
+%% Experiment with various block sizes
+
+for i_prob = 1:N
+    prob_seed = i_prob-1;
+    disp(' ')
+    disp(['Problem ',num2str(i_prob)])
+    [c, A, b, opt_val] = generate_linprog_problem(m,n,prob_seed);
+    for i_num_blocks = 1:length(num_blocks_range)
+        num_blocks = num_blocks_range(i_num_blocks);
+        for precond = [true, false]
+            [ov,~,~,~,eh] = lp_primal_admm_with_splitting(c, A, b, MAX_ITER, TOL, beta, ...
+                                    precond, num_blocks, rnd_permute, seed);
+            
+            if abs(ov - opt_val) > corr_tol
+                disp(['Block size: ',num2str(block_size)])
+                if precond
+                    disp('Using Preconditioning')
+                end
+                disp(['Converged at:', length(eh)])
+                warning('Incorrect Solution!')
+                % store the number of steps used for convergence
+                result{precond+1}(i_num_blocks, i_prob) = -1;
+            else 
+                % store the number of steps used for convergence
+                result{precond+1}(i_num_blocks, i_prob) = length(eh);
+            end
+        end
+    end
+end
+
+save('test_admm_primal_block_split.mat','result','num_blocks_range','rnd_permute')
+
+%% Plot the results
+
+figure
+subplot(1,2,1)
+title('without pre-conditioning')
+plot_errorbar_param_conv(result(:,1),num_blocks_range, ...
+                [strcat('\beta = ',num2str(beta))], [0,10000])
+
+subplot(1,2,2)
+title('with preconditioning')
+plot_errorbar_param_conv(result(:,2),num_blocks_range, ...
+                [strcat('\beta = ',num2str(beta))], [0,10000])
+
