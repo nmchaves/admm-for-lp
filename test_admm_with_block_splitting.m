@@ -13,7 +13,7 @@ beta = 0.9;     % parameter (for augmenting lagrangian)
 precondition = true;
 seed = 0; % solver seed
 
-N = 2; % # number of problems to solve
+N = 10; % # number of problems to solve
 corr_tol = 0.01; % Tolerance for correctness
 num_blocks_range = [1, 5, 10, 15, 20]; % # of blocks to use for each splitting experiment
 rnd_permute = true; % Whether or not to randomly permute the block update order
