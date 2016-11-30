@@ -1,4 +1,10 @@
 function [blocks_as_cell_arr] = split_blocks(mat, blocks, split_direction, verbose)
+% split a matrix into a cell array of matrixes
+% inputs:
+%   mat: input matrix
+%   blocks: an integer or an array of block assignments
+%   split_direction: direction to split the matrix
+%   verbose: print the block splitting and print the block assignment
 
 % check inputs
 switch nargin 
@@ -57,6 +63,10 @@ else % create a block vector based on even consequetive splits
         end
         block_assignment(first:last) = i;
     end
+end
+
+if verbose
+    bar(block_assignment)
 end
 
 blocks_as_cell_arr = cell(n_blocks, 1);
