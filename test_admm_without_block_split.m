@@ -5,8 +5,12 @@ prob_seed = 0;
 n_blocks = 10;
 sparsity = 0.2;
 % [c, A, b, opt_val] = generate_linprog_problem(100,200,prob_seed);
+
+% [c, A, b, opt_val,blocks] = generate_large_sparse_problem(100,200,...
+%    'block',sparsity,n_blocks,prob_seed,true);
+
 [c, A, b, opt_val,blocks] = generate_large_sparse_problem(100,200,...
-    'block',sparsity,n_blocks,prob_seed,true);
+    'random',sparsity,n_blocks,prob_seed,true);
 
 A = full(A);
 

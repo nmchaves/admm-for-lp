@@ -1,5 +1,5 @@
-function [ opt_val, x_opt, y_opt, s_opt, err_hist ] = lp_primal_admm_with_splitting( c, A, b, MAX_ITER, TOL, beta, ...
-                                                            precondition, NUM_BLOCKS, rnd_permute_x1_update, seed, verbose )
+function [opt_val,x_opt,y_opt,s_opt,err_hist] = lp_primal_ip_admm_with_splitting( c, A, b, MAX_ITER, TOL, beta, ...
+                                                precondition, NUM_BLOCKS, rnd_permute_x1_update, seed, verbose )
 
 [m, n] = size(A);
 
@@ -12,16 +12,9 @@ end
 % random initilization
 rng(seed)
 
-% Initialize y
 y = zeros(m, 1);
-
-% Initialize s
 s = ones(n, 1);
-
-% Initialize x1 randomly (doesn't need to be positive).
 x1 = randn(n, 1);
-
-% Initialize x2 randomly (must be nonnegative). 
 x2 = rand(n, 1);
 
 % Split data into blocks

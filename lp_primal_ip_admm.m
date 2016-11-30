@@ -1,4 +1,4 @@
-function [opt_val, x_opt, y_opt, s_opt, err_hist] = lp_primal_ip_admm(c, A, b, MAX_ITER, TOL, beta, gamma, precondition, seed)
+function [opt_val, x_opt, y_opt, s_opt, err_hist] = lp_primal_ip_admm(c, A, b, MAX_ITER, TOL, beta, gamma, precondition, seed,verbose)
 % admm_lp_primal  
 %
 %   See also SUM, PLUS.
