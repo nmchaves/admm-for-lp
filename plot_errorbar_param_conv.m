@@ -1,4 +1,4 @@
-function plot_errorbar_param_conv(input,param,conditions, ylim)
+function plot_errorbar_param_conv(input,param,conditions, ylim, xaxis_label)
 hold on
 for i = 1:length(input)
     res = input{i};
@@ -6,7 +6,7 @@ for i = 1:length(input)
 end
 set(gca,'XTick',1:length(param))
 set(gca,'XTickLabel',cellfun(@num2str, num2cell(param), 'un',0))
-xlabel('beta')
+xlabel(xaxis_label)
 ylabel('number of steps to convergence')
 axis([0,length(param)+1,ylim(1),ylim(2)])
 legend(conditions)
