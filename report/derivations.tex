@@ -1,0 +1,283 @@
+%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+\usepackage{amsmath}
+\usepackage{babel}
+\begin{document}
+
+\section*{Primal ADMM }
+
+\[
+L^{P}(\mathbf{x}_{1},\mathbf{x}_{2},\mathbf{y})=\mathbf{c}^{T}\mathbf{x}_{1}-\mathbf{y}^{T}\left(A\mathbf{x}_{1}-\mathbf{b}\right)-\mathbf{s}^{T}\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)+\frac{\beta}{2}\left(\left\Vert A\mathbf{x}_{1}-\mathbf{b}\right\Vert ^{2}+\left\Vert \mathbf{x}_{1}-\mathbf{x}_{2}\right\Vert ^{2}\right)
+\]
+
+
+
+\subsection*{Primal ADMM Update}
+
+\[
+\nabla_{\mathbf{x}_{1}}L^{P}(\mathbf{x}_{1},\mathbf{x}_{2},\mathbf{y})=\mathbf{c}-A^{T}\mathbf{y}-\mathbf{s}+\beta\left(A^{T}\left(A\mathbf{x}_{1}-\mathbf{b}\right)+\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)\right)
+\]
+
+
+Setting the gradient to $0$, we obtain the update step for $\mathbf{x}_{1}$:
+
+\[
+\mathbf{x}_{1}=\left(A^{T}A+I\right)^{-1}\left(\frac{1}{\beta}A^{T}\mathbf{y}+\frac{1}{\beta}\mathbf{s}-\frac{1}{\beta}\mathbf{c}+A^{T}\mathbf{b}+\mathbf{x}_{2}\right)
+\]
+
+
+For $\mathbf{x}_{2}$:
+
+\[
+\nabla_{\mathbf{x}_{2}}L^{P}=\mathbf{s}+\beta\left(\mathbf{x}_{2}-\mathbf{x}_{1}\right)
+\]
+
+
+Setting the gradient to $0$, we obtain the update step for $\mathbf{x}_{2}$:
+
+\[
+\mathbf{x}_{2}=\max\left\{ \mathbf{x}_{1}-\frac{\mathbf{s}}{\beta},0\right\} 
+\]
+
+
+where the max is computed component-wise to ensure that $\mathbf{x}_{2}\geq0$.
+
+
+\subsection*{Primal with Block Splitting}
+
+For simplicity, we first consider splitting the problem into 2 blocks
+of equal size as follows:
+
+\[
+\mathbf{x}_{1}=\begin{bmatrix}\mathbf{x}_{1,1}\\
+\mathbf{x}_{1,2}
+\end{bmatrix}
+\]
+
+
+\[
+A=\begin{bmatrix}A_{1} & A_{2}\end{bmatrix}
+\]
+
+
+Then, the Lagrangian can be expressed as:
+
+\begin{eqnarray*}
+L^{P}(\mathbf{x}_{1},\mathbf{x}_{2},\mathbf{y}) & = & \mathbf{c}_{1}^{T}\mathbf{x}_{1,1}+\mathbf{c}_{2}^{T}\mathbf{x}_{1,2}-\mathbf{y}^{T}\left(A_{1}\mathbf{x}_{1,1}+A_{2}\mathbf{x}_{1,2}-\mathbf{b}\right)-\mathbf{s}_{1}^{T}\left(\mathbf{x}_{1,1}-\mathbf{x}_{2,1}\right)-\mathbf{s}_{2}^{T}\left(\mathbf{x}_{1,2}-\mathbf{x}_{2,2}\right)\\
+ &  & +\frac{\beta}{2}\left(\left\Vert A_{1}\mathbf{x}_{1,1}+A_{2}\mathbf{x}_{1,2}-\mathbf{b}\right\Vert ^{2}+\left\Vert \mathbf{x}_{1,1}-\mathbf{x}_{2,1}\right\Vert ^{2}+\left\Vert \mathbf{x}_{1,2}-\mathbf{x}_{2,2}\right\Vert ^{2}\right)
+\end{eqnarray*}
+
+
+Taking the gradient with respect to the 1st block of $\mathbf{x}_{1}$:
+
+\[
+\nabla_{\mathbf{x}_{1,1}}L^{P}(\mathbf{x}_{1},\mathbf{x}_{2},\mathbf{y})=\mathbf{c}_{1}-A_{1}^{T}\mathbf{y}-\mathbf{s}_{1}+\beta\left(A_{1}^{T}\left(A_{1}\mathbf{x}_{1,1}+A_{2}\mathbf{x}_{1,2}-\mathbf{b}\right)+\left(\mathbf{x}_{1,1}-\mathbf{x}_{2,1}\right)\right)
+\]
+
+
+Setting the gradient to 0, we obtain the update for $\mathbf{x}_{1,1}$:
+
+\[
+\mathbf{x}_{1,1}^{k+1}=\left(A_{1}^{T}A_{1}+I\right)^{-1}\left(\frac{1}{\beta}A_{1}^{T}\mathbf{y}+\frac{1}{\beta}\mathbf{s}_{1}-\frac{1}{\beta}\mathbf{c}_{1}+A_{1}^{T}\mathbf{b}+\mathbf{x}_{2,1}^{k}-A_{1}^{T}A_{2}\mathbf{x}_{1,2}^{k}\right)
+\]
+
+
+By symmetry, the update step for the 2nd block of $\mathbf{x}_{1}$
+is:
+
+\[
+\mathbf{x}_{1,2}^{k+1}=\left(A_{2}^{T}A_{2}+I\right)^{-1}\left(\frac{1}{\beta}A_{2}^{T}\mathbf{y}+\frac{1}{\beta}\mathbf{s}_{2}-\frac{1}{\beta}\mathbf{c}_{2}+A_{2}^{T}\mathbf{b}+\mathbf{x}_{2,2}^{k}-A_{2}^{T}A_{1}\mathbf{x}_{1,1}^{k+1}\right)
+\]
+
+
+Note that here we use $\mathbf{x}_{1,1}^{k+1}$ to update $\mathbf{x}_{1,2}$.
+If we use a randomized update order, then we may end up updating $\mathbf{x}_{1,2}$
+first instead.
+
+
+\subsection*{Block Splitting (for a general number of blocks)}
+
+We can easily extend the above result to a general number of blocks.
+Let $U$ denote the set of blocks which have already been updated
+at the current iteration. To update block $i$ of $\mathbf{x}_{1}$,
+we compute:
+
+\[
+\mathbf{x}_{1,i}^{k+1}=\left(A_{i}^{T}A_{i}+I\right)^{-1}\left(\frac{1}{\beta}A_{i}^{T}\mathbf{y}+\frac{1}{\beta}\mathbf{s}_{i}-\frac{1}{\beta}\mathbf{c}_{i}+A_{i}^{T}\mathbf{b}+\mathbf{x}_{2,i}^{k}-\sum_{j\neq i,j\in U}A_{i}^{T}A_{j}\mathbf{x}_{1,j}^{k+1}-\sum_{j\neq i,j\notin U}A_{i}^{T}A_{j}\mathbf{x}_{1,j}^{k}\right)
+\]
+
+
+where $A_{i}$ refers to the $i^{\text{th}}$ block of columns of
+$A$.
+
+
+\section*{Dual ADMM }
+
+\[
+L^{d}(\mathbf{y},\mathbf{s},\mathbf{x})=-\mathbf{b}^{T}\mathbf{y}-\mathbf{x}^{T}\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right)+\frac{\beta}{2}\left\Vert A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right\Vert ^{2}
+\]
+
+
+
+\subsection*{Dual ADMM Update}
+
+\[
+\nabla_{\mathbf{y}}L^{d}(\mathbf{y},\mathbf{s},\mathbf{x})=-\mathbf{b}-A\mathbf{x}+\beta A\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right)
+\]
+
+
+Setting the gradient to $0$, we obtain the update step for $\mathbf{y}$:
+
+\begin{eqnarray*}
+A\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right) & = & \frac{1}{\beta}\left(A\mathbf{x}+\mathbf{b}\right)\\
+AA^{T}\mathbf{y} & = & \frac{1}{\beta}\left(A\mathbf{x}+\mathbf{b}\right)-A\mathbf{s}+A\mathbf{c}\\
+\mathbf{y} & = & \left(AA^{T}\right)^{-1}\left(\frac{1}{\beta}\left(A\mathbf{x}+\mathbf{b}\right)-A\mathbf{s}+A\mathbf{c}\right)
+\end{eqnarray*}
+
+
+For \textbf{$\mathbf{s}$}:
+
+\[
+\nabla_{\mathbf{s}}L^{d}(\mathbf{y},\mathbf{s},\mathbf{x})=-\mathbf{x}+\beta\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right)
+\]
+
+
+Setting the gradient to $0$, we obtain the update step for s:
+
+\[
+\mathbf{s}=\max\left\{ \frac{1}{\beta}\mathbf{x}-A^{T}\mathbf{y}+\mathbf{c},0\right\} 
+\]
+
+
+
+\subsection*{Dual ADMM With Block Splitting}
+
+For simplicity, we first consider splitting the problem into 2 blocks
+of equal size as follows:
+
+\[
+\mathbf{y}=\begin{bmatrix}\mathbf{y}_{1}\\
+\mathbf{y}_{2}
+\end{bmatrix}
+\]
+
+
+\[
+\mathbf{b}=\begin{bmatrix}\mathbf{b}_{1}\\
+\mathbf{b}_{2}
+\end{bmatrix}
+\]
+
+
+\[
+A^{T}=\begin{bmatrix}A_{1}^{T} & A_{2}^{T}\end{bmatrix}
+\]
+
+
+Then the Lagrangian can be expressed as:
+
+\[
+L^{d}(\mathbf{y},\mathbf{s},\mathbf{x})=-\mathbf{b}_{1}^{T}\mathbf{y}_{1}-\mathbf{b}_{2}^{T}\mathbf{y}_{2}-\mathbf{x}^{T}\left(A_{1}^{T}\mathbf{y}_{1}+A_{2}^{T}\mathbf{y}_{2}+\mathbf{s}-\mathbf{c}\right)+\frac{\beta}{2}\left\Vert A_{1}^{T}\mathbf{y}_{1}+A_{2}^{T}\mathbf{y}_{2}+\mathbf{s}-\mathbf{c}\right\Vert ^{2}
+\]
+
+
+Differentiating with respect to $\mathbf{y}_{1}$:
+
+\[
+\nabla_{\mathbf{y}_{1}}L^{d}(\mathbf{y},\mathbf{s},\mathbf{x})=-\mathbf{b}_{1}-A_{1}\mathbf{x}+\beta A_{1}\left(A_{1}^{T}\mathbf{y}_{1}+A_{2}^{T}\mathbf{y}_{2}+\mathbf{s}-\mathbf{c}\right)
+\]
+
+
+Setting the gradient to 0, we obtain the update for $\mathbf{y}_{1}$:
+
+\begin{eqnarray*}
+A_{1}\left(A_{1}^{T}\mathbf{y}_{1}^{k+1}+A_{2}^{T}\mathbf{y}_{2}^{k}+\mathbf{s}-\mathbf{c}\right) & = & \frac{1}{\beta}\left(A_{1}\mathbf{x}+\mathbf{b}_{1}\right)\\
+A_{1}A_{1}^{T}\mathbf{y}_{1}^{k+1} & = & \frac{1}{\beta}\left(A_{1}\mathbf{x}+\mathbf{b}_{1}\right)-A_{1}\left(A_{2}^{T}\mathbf{y}_{2}^{k}+\mathbf{s}-\mathbf{c}\right)\\
+\mathbf{y}_{1}^{k+1} & = & \left(A_{1}A_{1}^{T}\right)^{-1}\left(\frac{1}{\beta}\left(A_{1}\mathbf{x}+\mathbf{b}_{1}\right)-A_{1}\left(A_{2}^{T}\mathbf{y}_{2}^{k}+\mathbf{s}-\mathbf{c}\right)\right)
+\end{eqnarray*}
+
+
+By symmetry, the update for $\mathbf{y}_{2}$ is:
+
+\[
+\mathbf{y}_{2}^{k+1}=\left(A_{2}A_{2}^{T}\right)^{-1}\left(\frac{1}{\beta}\left(A_{2}\mathbf{x}+\mathbf{b}_{2}\right)-A_{2}\left(A_{1}^{T}\mathbf{y}_{1}^{k+1}+\mathbf{s}-\mathbf{c}\right)\right)
+\]
+
+
+assuming that we update $\mathbf{y}_{2}$ after $\mathbf{y}_{1}$.
+
+
+\subsection*{Dual Block Splitting (for a general number of blocks)}
+
+We can easily extend the above result to a general number of blocks.
+Let $U$ denote the set of blocks which have already been updated
+at the current iteration. To update block $i$ of $\mathbf{y}$:
+
+\[
+\mathbf{y}_{i}^{k+1}=\left(A_{i}A_{i}^{T}\right)^{-1}\left(\frac{1}{\beta}\left(A_{i}\mathbf{x}+\mathbf{b}_{i}\right)-\sum_{j\neq i,j\in U}A_{i}A_{j}^{T}\mathbf{y}_{j}^{k+1}-\sum_{j\neq i,j\notin U}A_{i}A_{j}^{T}\mathbf{y}_{j}^{k}-A_{i}\left(\mathbf{s}-\mathbf{c}\right)\right)
+\]
+
+
+where $A_{i}$ refers to rows of $A$.
+
+
+\section*{Interior-Point ADMM for Primal}
+
+\[
+L_{\mu}^{p}(\mathbf{x}_{1},\mathbf{x}_{2},\mathbf{y})=\mathbf{c}^{T}\mathbf{x}_{1}-\mu\sum_{j}\ln\left(x_{1,j}\right)-\mathbf{y}^{T}\left(A\mathbf{x}_{1}-\mathbf{b}\right)-\mathbf{s}^{T}\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)+\frac{\beta}{2}\left(\left\Vert A\mathbf{x}_{1}-\mathbf{b}\right\Vert ^{2}+\left\Vert \mathbf{x}_{1}-\mathbf{x}_{2}\right\Vert ^{2}\right)
+\]
+
+
+
+\subsection*{TODO: everything past here is not complete.}
+
+
+\subsection*{Update}
+
+\[
+\nabla_{\mathbf{x}_{1}}L_{\mu}^{P}(\mathbf{x}_{1},\mathbf{x}_{2},\mathbf{y})=\mathbf{c}-\mu\left(\frac{1}{\mathbf{x}_{1}}\right)-A^{T}\mathbf{y}-\mathbf{s}+\beta\left(A^{T}\left(A\mathbf{x}_{1}-\mathbf{b}\right)+\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)\right)
+\]
+
+
+Setting the gradient to $0$, we obtain the update step for $x_{1}$:
+
+\begin{eqnarray*}
+0 & = & \mathbf{c}-\mu\left(\frac{1}{\mathbf{x}_{1}}\right)-A^{T}\mathbf{y}-\mathbf{s}+\beta\left(A^{T}\left(A\mathbf{x}_{1}-\mathbf{b}\right)+\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)\right)\\
+ & =
+\end{eqnarray*}
+
+
+
+\section*{Interior-Point ADMM for Dual}
+
+\[
+L_{\mu}^{d}(\mathbf{y},\mathbf{s},\mathbf{x})=-\mathbf{b}^{T}\mathbf{y}-\mu\sum_{j}\ln\left(s_{j}\right)-\mathbf{x}^{T}\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right)+\frac{\beta}{2}\left\Vert A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right\Vert ^{2}
+\]
+
+
+Update for y:
+
+\[
+\nabla_{\mathbf{y}}L_{\mu}^{d}(\mathbf{y},\mathbf{s},\mathbf{x})=-\mathbf{b}-A\mathbf{x}+\beta A\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right)
+\]
+
+
+Setting to 0, we get the update:
+
+\[
+\mathbf{y}=A^{-T}\left(\frac{1}{\beta}A^{-1}\left(A\mathbf{x}+\mathbf{b}\right)-\mathbf{s}+\mathbf{c}\right)
+\]
+
+
+Update for s:
+
+\[
+\nabla_{\mathbf{s}}L_{\mu}^{d}(\mathbf{y},\mathbf{s},\mathbf{x})=-\mu\left(\frac{1}{\mathbf{s}}\right)-\mathbf{x}+\beta\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right)
+\]
+
+\end{document}
