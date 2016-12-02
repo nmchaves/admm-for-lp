@@ -4,17 +4,17 @@ seed = 0;
 
 %% generate problem
 m = 100;
-n = 200;
+n = 400;
 prob_seed = 0;
 [c, A, b, opt_val] = generate_linprog_problem(m, n , prob_seed);
 
 %% parameters
 MAX_ITER = 1e4; % max # of iterations
-TOL = 1e-4;     % Tolerance
+TOL = 1e-4;     % tolerance
 beta = 0.9;     % parameter (for augmenting lagrangian)
 gamma = 0.1;
-precondition = false;
-rnd_permute = true; % This would have no effect anyways
+precondition = true;
+rnd_permute = false; % This would have no effect anyways
 verb = true;
 
 %% Dual ADMM with 1 block (no splitting)
