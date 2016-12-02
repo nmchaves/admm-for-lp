@@ -101,10 +101,12 @@ for t=1:MAX_ITER
     % Compute error and update history
     abs_err = norm(Ax1 - b);
     err_hist = [err_hist abs_err];
-    
     % Early stopping condition
     if abs_err < TOL
         %fprintf('Converged at step %d \n', t)
+        if verbose
+            fprintf('Converged at step %d \n', t)
+        end
         break
     end
 end
