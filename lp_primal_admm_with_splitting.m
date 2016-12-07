@@ -1,7 +1,49 @@
 function [ opt_val, x_opt, y_opt, s_opt, err_hist ] = lp_primal_admm_with_splitting( c, A, b, MAX_ITER, TOL, beta, ...
-                                                            precondition, NUM_BLOCKS, rnd_permute_x1_update, seed, verbose )
+    precondition, BLOCKS, rnd_permute_x1_update, seed, verbose)
+
+
+switch nargin 
+    case 10
+        verbose = false;
+    case 11
+        fprintf('\n');
+        verbose = true;
+    otherwise
+        error('Wrong number of inputs');
+end
+
+if verbose
+    fprintf('---------------------------------------------------\n')
+    fprintf('Solving LP with Primal ADMM with block splitting\n')
+    if (rnd_permute_x1_update)
+        fprintf('  Using random permutation on updates\n')
+    else
+        fprintf('  Using sequential updates\n')
+    end
+end
+
+
+if length(BLOCKS) == 1 % only the number of blocks specified
+    NUM_BLOCKS = BLOCKS;
+    if verbose
+        disp(['Only specified ',num2str(NUM_BLOCKS),' blocks to be splitted evenly']);
+    end
+else  % the block assignment specified
+    NUM_BLOCKS = max(BLOCKS);
+    if verbose
+        disp(['Splitting into ',num2str(NUM_BLOCKS),'blocks according to block assignment']);
+    end
+end
 
 [m, n] = size(A);
+
+if verbose
+    if precondition
+        fprintf('  Using pre-conditioning\n')
+    else 
+        fprintf('  NOT using pre-conditioning\n')
+    end
+end 
 
 if precondition
     AAT_inv_sqrt = sqrtm(inv(A * A'));
@@ -21,7 +63,7 @@ s = ones(n, 1);
 % Initialize x1 randomly (doesn't need to be positive).
 x1 = randn(n, 1);
 
-% Initialize x2 randomly (must be nonnegative). 
+% Initialize x2 randomly (must be nonnegative).
 x2 = rand(n, 1);
 
 % Split data into blocks
@@ -47,7 +89,7 @@ for i=1:NUM_BLOCKS
             A_j = A_blocks{j};
             AiTAj_blocks{i,j} = A_i' * A_j;
         end
-    end 
+    end
 end
 
 % history of errors at each iteration
@@ -77,8 +119,8 @@ for t=1:MAX_ITER
         end
         
         x1_blocks{i} = ATA_plus_I_inv_blocks{i} * ((1/beta)*A_cur'*y + ...
-                   (1/beta)*s_blocks{i} - (1/beta)*c_blocks{i} + A_cur'*b + ...
-                   x2_blocks{i} - cross_terms_sum);
+            (1/beta)*s_blocks{i} - (1/beta)*c_blocks{i} + A_cur'*b + ...
+            x2_blocks{i} - cross_terms_sum);
     end
     
     % update x2 1 block at a time
@@ -97,7 +139,7 @@ for t=1:MAX_ITER
     for i=1:NUM_BLOCKS
         s_blocks{i} = s_blocks{i} - beta * (x1_blocks{i} - x2_blocks{i});
     end
-    
+        
     % Compute error and update history
     abs_err = norm(Ax1 - b);
     err_hist = [err_hist abs_err];
@@ -117,9 +159,9 @@ opt_val = c' * x_opt;
 y_opt = y;
 s_opt = cell2mat(s_blocks);
 
-%if verbose
-%    fprintf('Optimal Objective Value: %f \n', opt_val)
-%end
+if verbose
+    fprintf('Optimal Objective Value: %f \n', opt_val)
+end
 
 
 end

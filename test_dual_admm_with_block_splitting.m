@@ -3,9 +3,9 @@ addpath(genpath('figure_util'))
 seed = 0;
 
 %% generate problem
-m = 100;
-n = 400;
-prob_seed = 0;
+m = 50;
+n = 200;
+prob_seed = 1;
 [c, A, b, opt_val] = generate_linprog_problem(m, n , prob_seed);
 
 %% parameters

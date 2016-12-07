@@ -5,7 +5,6 @@ n = 100;
 prob_seed = 0;
 [c, A, b, opt_val] = generate_linprog_problem(m, n , prob_seed);
 
-
 %% parameters
 MAX_ITER = 1e4; % max # of iterations
 TOL = 1e-4;     % Tolerance

@@ -1,18 +1,88 @@
-%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
-%% Do not edit unless you really know what you are doing.
-\documentclass[english]{article}
-\usepackage[T1]{fontenc}
-\usepackage[latin9]{inputenc}
-\usepackage{geometry}
-\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
-\usepackage{amsmath}
-\usepackage{babel}
+\documentclass{article}
+\usepackage{graphicx,fancyhdr,amsmath,amssymb,amsthm,subfig,url,hyperref}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumerate}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{pifont}
+ \usepackage{color}
+
+
+\usepackage{tikz}
+\usepackage{tabularx}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{arrows}
+
+\renewcommand{\algorithmicrequire}{\textbf{input:}}
+
+%----------------------- Macros and Definitions --------------------------
+
+%%% FILL THIS OUT
+\newcommand{\studentname}{Nico Chaves, Junjie Zhu}
+\newcommand{\suid}{jjzhu}
+\newcommand{\exerciseset}{}
+%%% END
+\renewcommand{\theenumi}{\bf \Alph{enumi}}
+
+%\theoremstyle{plain}
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{lemma}[theorem]{Lemma}
+
+\fancypagestyle{plain}{}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RO,LE]{\sffamily\bfseries\large  MS\&E 310 Final Project, Stanford University}
+\fancyhead[LO,RE]{\sffamily\bfseries\large Multi-Block ADMM for LP}
+% \fancyfoot[LO,RE]{\sffamily\bfseries\large \studentname: \suid @stanford.edu}
+\fancyfoot[RO,LE]{\sffamily\bfseries\thepage}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+
+\graphicspath{{figures/}}
+
+%-------------------------------- Title ----------------------------------
+
+\title{Multi-block ADMM Methods for Linear Programming }
+\author{\studentname}
+
+%--------------------------------- Text ----------------------------------
+
 \begin{document}
+\maketitle
+\vspace{0.1in}
+\maketitle
+
+
+
+%%%%%%
+\section{Introduction}
+
+The goal of this project is to use alternating direction method of multipliers (ADMM)
+\begin{align}
+\text{minimize}_{\mathbf{x}} &\quad \mathbf{c}^T\mathbf{x} \tag{OPT1}\label{OPT1} \\
+\text{subject to } &\quad  A \mathbf{x} = \mathbf{b},  \nonumber \\
+&\quad \mathbf{x} \geq \mathbf{0} \nonumber 
+\end{align}
+or its dual
+\begin{align}
+\text{maximize}_{\mathbf{y}, \mathbf{s}} &\quad \mathbf{b}^T\mathbf{y}  \tag{OPT2}\label{OPT2} \\
+\text{subject to } &\quad  A^T \mathbf{y}  + \mathbf{s} = \mathbf{c},  \nonumber \\
+&\quad \mathbf{s} \geq \mathbf{0} \nonumber.
+\end{align}
+
+\section{Algorithms}
 
 \section*{Primal ADMM }
-
+We re-formulate the problem as:
+\begin{align}
+\text{minimize}_{ \mathbf{x}_{1}, \mathbf{x}_{2}} &\quad \mathbf{c}^T\mathbf{x}_1 \tag{OPT3}\label{OPT3} \\
+\text{subject to  \ \  } &\quad  A \mathbf{x}_{1} = \mathbf{b}  \nonumber \\
+&\quad \mathbf{x}_{1}  - \mathbf{x}_{2} = \mathbf{0}  \nonumber \\
+&\quad \mathbf{x}_{2} \geq \mathbf{0} \nonumber 
+\end{align}
+anc consider the split Lagrangian function:
 \[
-L^{P}(\mathbf{x}_{1},\mathbf{x}_{2},\mathbf{y})=\mathbf{c}^{T}\mathbf{x}_{1}-\mathbf{y}^{T}\left(A\mathbf{x}_{1}-\mathbf{b}\right)-\mathbf{s}^{T}\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)+\frac{\beta}{2}\left(\left\Vert A\mathbf{x}_{1}-\mathbf{b}\right\Vert ^{2}+\left\Vert \mathbf{x}_{1}-\mathbf{x}_{2}\right\Vert ^{2}\right)
+L^{P}(\mathbf{x}_{1},\mathbf{x}_{2},\mathbf{y})=\mathbf{c}^{T}\mathbf{x}_{1}-\mathbf{y}^{T}\left(A\mathbf{x}_{1}-\mathbf{b}\right)-\mathbf{s}^{T}\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)+\frac{\beta}{2}\left(\left\Vert A\mathbf{x}_{1}-\mathbf{b}\right\Vert ^{2}+\left\Vert \mathbf{x}_{1}-\mathbf{x}_{2}\right\Vert ^{2}\right).
 \]
 
 
@@ -226,7 +296,18 @@ at the current iteration. To update block $i$ of $\mathbf{y}$:
 where $A_{i}$ refers to rows of $A$.
 
 
-\section*{Interior-Point ADMM for Primal}
+\section{Interior-Point ADMM}
+
+\section*{Primal}
+
+We can use the previous formulation in \eqref{OPT3} with  $\mathbf{x}_{1}$ and $\mathbf{x}_{2}$ using the barrier function:
+
+\begin{align}
+\text{minimize}_{ \mathbf{x}_{1}, \mathbf{x}_{2}} &\quad \mathbf{c}^T\mathbf{x}_1 + \mu \sum_j \ln((\mathbf{x}_2)_j )\tag{OPT4}\label{OPT4} \\
+\text{subject to  \ \  } &\quad  A \mathbf{x}_{1} = \mathbf{b},  \nonumber \\
+&\quad \mathbf{x}_{1}  - \mathbf{x}_{2} = \mathbf{0}, \nonumber \\
+&\quad \mathbf{x}_{2} > \mathbf{0} \nonumber 
+\end{align}
 
 \[
 L_{\mu}^{p}(\mathbf{x}_{1},\mathbf{x}_{2},\mathbf{y})=\mathbf{c}^{T}\mathbf{x}_{1}-\mu\sum_{j}\ln\left(x_{1,j}\right)-\mathbf{y}^{T}\left(A\mathbf{x}_{1}-\mathbf{b}\right)-\mathbf{s}^{T}\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)+\frac{\beta}{2}\left(\left\Vert A\mathbf{x}_{1}-\mathbf{b}\right\Vert ^{2}+\left\Vert \mathbf{x}_{1}-\mathbf{x}_{2}\right\Vert ^{2}\right)
@@ -238,6 +319,7 @@ L_{\mu}^{p}(\mathbf{x}_{1},\mathbf{x}_{2},\mathbf{y})=\mathbf{c}^{T}\mathbf{x}_{
 
 
 \subsection*{Update}
+`
 
 \[
 \nabla_{\mathbf{x}_{1}}L_{\mu}^{P}(\mathbf{x}_{1},\mathbf{x}_{2},\mathbf{y})=\mathbf{c}-\mu\left(\frac{1}{\mathbf{x}_{1}}\right)-A^{T}\mathbf{y}-\mathbf{s}+\beta\left(A^{T}\left(A\mathbf{x}_{1}-\mathbf{b}\right)+\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)\right)
@@ -253,7 +335,14 @@ Setting the gradient to $0$, we obtain the update step for $x_{1}$:
 
 
 
-\section*{Interior-Point ADMM for Dual}
+\section*{Dual Update}
+We can use the previous formulation in \eqref{OPT2} using the barrier function:
+
+\begin{align}
+\text{maximize}_{\mathbf{y}, \mathbf{s}} &\quad \mathbf{b}^T\mathbf{y} + \mu \sum_j \ln (s_j)  \tag{OPT5}\label{OPT5} \\
+\text{subject to } &\quad  A^T \mathbf{y}  + \mathbf{s} = \mathbf{c},  \nonumber \\
+&\quad \mathbf{s} > \mathbf{0} \nonumber.
+\end{align}
 
 \[
 L_{\mu}^{d}(\mathbf{y},\mathbf{s},\mathbf{x})=-\mathbf{b}^{T}\mathbf{y}-\mu\sum_{j}\ln\left(s_{j}\right)-\mathbf{x}^{T}\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right)+\frac{\beta}{2}\left\Vert A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right\Vert ^{2}
@@ -279,5 +368,8 @@ Update for s:
 \[
 \nabla_{\mathbf{s}}L_{\mu}^{d}(\mathbf{y},\mathbf{s},\mathbf{x})=-\mu\left(\frac{1}{\mathbf{s}}\right)-\mathbf{x}+\beta\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right)
 \]
-
+\newpage
+\vspace{0.4in}
+%\bibliographystyle{plain}
+\bibliographystyle{ieeetr}
 \end{document}
