@@ -1,6 +1,17 @@
 function [ opt_val, x_opt, y_opt, s_opt, err_hist ] = lp_dual_admm_with_splitting( c, A, b, MAX_ITER, TOL, beta, ...
     precondition, BLOCKS, rnd_permute_x1_update, seed, verbose )
 
+switch nargin 
+    case 10
+        verbose = false;
+    case 11
+        fprintf('\n');
+        verbose = true;
+    otherwise
+        error('Wrong number of inputs');
+end
+
+
 if verbose
     fprintf('---------------------------------------------------\n')
     fprintf('Solving LP with Dual ADMM with block splitting\n')
@@ -25,10 +36,16 @@ else  % the block assignment specified
 end
 
 % preconditioning
-if precondition
-    if verbose
+if verbose
+    if precondition
         fprintf('  Using pre-conditioning\n')
+    else 
+        fprintf('  NOT using pre-conditioning\n')
     end
+end 
+
+if precondition
+    
     AAT_inv_sqrt = sqrtm(inv(A * A')) * A;
     b = sqrtm(inv(A * A')) * b;
     A = AAT_inv_sqrt;
@@ -102,7 +119,6 @@ for t = 1:MAX_ITER
     s = c - ATy + 1/beta * x;
     s = s .* (s > 0);
     x = x - beta * (ATy + s - c);
-    
     % update mu
     % mu = mu*gamma;
     
