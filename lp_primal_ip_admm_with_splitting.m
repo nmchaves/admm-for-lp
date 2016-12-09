@@ -1,9 +1,20 @@
 function [opt_val,x_opt,y_opt,s_opt,err_hist] = lp_primal_ip_admm_with_splitting(...
     c, A, b, MAX_ITER, TOL, beta, gamma, precondition, BLOCKS, rnd_permute_x1_update, seed, verbose)
 
+
+switch nargin 
+    case 11
+        verbose = false;
+    case 12
+        fprintf('\n');
+        verbose = true;
+    otherwise
+        error('Wrong number of inputs');
+end
+
 if verbose
     fprintf('---------------------------------------------------\n')
-    fprintf('Solving LP with ip Primal ADMM with block splitting\n')
+    fprintf('Solving LP with Primal IP ADMM with block splitting\n')
 end
 
 
