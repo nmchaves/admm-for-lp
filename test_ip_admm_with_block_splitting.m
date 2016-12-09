@@ -12,7 +12,7 @@ MAX_ITER = 1e4; % max # of iterations
 TOL = 1e-3;     % Tolerance
 beta = 0.9;     % parameter (for augmenting lagrangian)
 gamma = 0.1;
-precondition = false;
+precondition = true;
 verb = true; 
 
 %% Primal IP ADMM with 1 block (no splitting)
@@ -21,6 +21,12 @@ NUM_BLOCKS = 1;
 rnd_permute = true; % This would have no effect anyways
 [ov1,~,~,~,eh1] = lp_primal_ip_admm_with_splitting(c, A, b, MAX_ITER, TOL, beta, gamma, ...
                                     precondition, NUM_BLOCKS, rnd_permute, seed, verb);
+toc
+%% CHECK WITH NON-SPLITTING CASE
+tic
+[ov1_b,~,~,~,eh1_b] = lp_primal_ip_admm(c, A, b, MAX_ITER, TOL, beta, gamma, ...
+                                        precondition, seed, verb);
+norm(eh1 - eh1_b)
 toc
 %% Primal IP ADMM with 5 blocks
 tic
@@ -54,6 +60,13 @@ rnd_permute = true; % This would have no effect anyways
 [ov1,~,~,~,eh1] = lp_dual_ip_admm_with_splitting(c, A, b, MAX_ITER, TOL, beta, gamma, ...
                                     precondition, NUM_BLOCKS, rnd_permute, seed, verb);
 toc
+%% CHECK WITH NON-SPLITTING CASE
+tic
+[ov1_b,~,~,~,eh1_b] = lp_dual_ip_admm(c, A, b, MAX_ITER, TOL, beta, gamma, ...
+                                        precondition, seed, verb);
+norm(eh1 - eh1_b)
+toc
+
 %% Dual IP ADMM with 5 blocks
 tic
 NUM_BLOCKS = 5;
