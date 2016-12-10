@@ -13,8 +13,8 @@ MAX_ITER = 5e3; % max # of iterations
 TOL = 1e-3;     % tolerance
 beta = 0.9;     % parameter (for augmenting lagrangian)
 gamma = 0.99;
-precondition = false;
-rnd_permute = true; % This would have no effect anyways
+precondition = true;
+rnd_permute = false; % This would have no effect anyways
 verb = true;
 
 %%
@@ -78,4 +78,4 @@ elseif ~precondition && rnd_permute
 else
     fname = 'noprecond_norndperm';
 end
-save_current_figure(['figures/',fname],'low','-png');
+save_current_figure(['figures/',fname],'high','-png');
