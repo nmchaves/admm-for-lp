@@ -10,4 +10,6 @@ xlabel(xaxis_label)
 ylabel('number of steps to convergence')
 axis([0,length(param)+1,ylim(1),ylim(2)])
 legend(conditions)
+box on
+grid on
 end
