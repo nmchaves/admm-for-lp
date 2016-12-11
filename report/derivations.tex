@@ -387,16 +387,23 @@ We evaluated the performance of the different ADMM approaches by randomly simula
 
 \subsection*{Insensitivity to $\beta$}
 
-First, we evaluated how sensitive the ADMM LP algorithms are to the $\beta$ parameter in the augmented Lagrangian. For each algorithm, we recorded the number of iterations required to converge as a function of $\beta$. We did not apply block splitting.
+First, we evaluated how sensitive the ADMM LP algorithms are to the $\beta$ parameter in the augmented Lagrangian. For each algorithm, we recorded the number of iterations required to converge as a function of $\beta$. For simplicity, we did not apply block splitting.
 
-The results are shown in Figure {\color{red}TODO!!}. We observe that all of the ADMM approaches are relatively insensitive to $\beta$. For the rest of our experiments, we fixed $\beta=0.5$. Choosing a different value of $\beta$ should not have much effect on the rest of our results.
+The results over 10 random problems of size $50 \times 300$ are shown in Figure \ref{fig:base_p_d}. We observe that all of the ADMM approaches are relatively insensitive to $\beta$. For the rest of our experiments, we fixed $\beta=0.5$. Choosing a different value of $\beta$ should not have much effect on the rest of our results. 
+
+\begin{figure*}[ht!]
+	\centering
+	\includegraphics[width=0.7\textwidth]{../figures/primal_dual_preconditioning.png}
+	\caption{Results on 10 random LP problem of size $50 \times 300$. }
+	\label{fig:base_p_d}
+\end{figure*}
 
 \subsection*{Baseline Block-splitting (No Random Permutation of Blocks, No Preconditioning)}
 To establish a baseline, we evaluated the ADMM solvers using sequential updating (i.e. we did not randomly permute the block update order) and without using preconditioning. The results of this experiment are shown in Figure \ref{fig:nop_nor}. In the figure, $B$ represents the number of blocks ($B=1$ indicates that no splitting was performed). Note that when $B>2$, the problem does not necessarily converge for the primal. As we will see in the following experiments, we can improve performance by introducing random permutations or preconditioning. 
 
 \begin{figure*}[h]
-	\caption{No Preconditioning, No Random Permutation}
 	\includegraphics[width=\textwidth]{../figures/noprecond_norndperm.png}
+	\caption{Results on a random LP problem of size $50 \times 300$. No preconditioning and no random permutation.}
 	\label{fig:nop_nor}
 \end{figure*}
 
@@ -405,8 +412,8 @@ To establish a baseline, we evaluated the ADMM solvers using sequential updating
 In this set of experiments, we randomly permuted the update order of the block variables at each iteration. The results are shown in Figure \ref{fig:nop_r}. When using random permutation, the primal now converges for all block sizes. Note that splitting the primal into more blocks requires more iterations. However, performing block splitting may still result in lower overall runtime because of the faster inverse computations. 
 
 \begin{figure*}[h]
-	\caption{Random Permutation, No Preconditioning}
 	\includegraphics[width=\textwidth]{../figures/noprecond_rndperm.png}
+	\caption{Results on a random LP problem of size $50 \times 300$. Only random permutation and no preconditioning.}
 	\label{fig:nop_r}
 \end{figure*}
 
@@ -416,8 +423,8 @@ In this set of experiments, we applied preconditioning to each problem and used 
 These results suggest that one should prefer to use the maximum number of blocks possible ($n$ for the primal and $m$ for the dual) when using preconditioning. In this case, the matrices that need to be inverted in the decision variable updates become scalars, so the updates can be computed rapidly.
 
 \begin{figure*}[h]
-	\caption{Preconditioning, No Random Permutation}
 	\includegraphics[width=\textwidth]{../figures/precond_norndperm.png}
+	\caption{Results on a random LP problem of size $50 \times 300$. Only preconditioning and no random permutation.}
 	\label{fig:p_nor}
 \end{figure*}
 
@@ -425,8 +432,9 @@ These results suggest that one should prefer to use the maximum number of blocks
 In this set of experiments, we evaluated the performance of each ADMM algorithm when the matrix $A$ is composed of block structures. Figure \ref{fig:struct_prob} visualizes $A$ as a heatmap. This type of matrix structure is common in practice. Often, groups of related constraints only involve a subset of the decision variables, resulting in the "staircase" block structure in Figure \ref{fig:struct_prob}. Furthermore, there are often "coupling" constraints involving many decision variables, which is reflected in the last 10 constraints of $A$. It is natural to study whether performing block splitting along $A$'s block structures will improve the performance of ADMM. Note that $m=100$, $n=200$ for this set of experiments. 
 
 \begin{figure*}[h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{../figures/struct_prob.png}
 	\caption{Heatmap of Structured Matrix}
-	\includegraphics[width=\textwidth]{../figures/struct_prob.png}
 	\label{fig:struct_prob}
 \end{figure*}
 
@@ -435,22 +443,22 @@ We reran each of the previous experiments on primal ADMM using the structured ma
 In Figure \ref{fig:struct_nop_nor}, the problem diverges when applying block splitting for both the primal and the interior point primal formulations. This issue is not necessarily specific to structured matrices. We've observed that ADMM with block splitting (for $B>2$ will either fail to converge to the proper solution as in Figure \ref{fig:nop_nor} or diverge as in Figure \ref{fig:struct_nop_nor}. 
 
 \begin{figure*}[h]
-	\caption{Structured Matrix. No Preconditioning, No Random Permutation}
 	\includegraphics[width=\textwidth]{../figures/struct_noprecond_norndperm.png}
+	\caption{Structured problem. No preconditioning and no random permutation.}
 	\label{fig:struct_nop_nor}
 \end{figure*}
 
 As in the non-structured case, we can resolve this issue by randomly permuting the block update order or applying preconditioning. The results for each approach are shown in Figures \ref{fig:struct_nop_r} and \ref{fig:struct_p_nor}. In both cases, the problem converges in approximately the same number of iterations as the single block case. The results are particularly striking for the preconditioning approach. These results suggest that performing optimal block splitting along a structured matrix may improve the performance of ADMM. In our future work, we plan to study whether this holds true in general for structured matrices.
 
 \begin{figure*}[h]
-	\caption{Structured Matrix. Random Permutation, No Preconditioning}
 	\includegraphics[width=\textwidth]{../figures/struct_noprecond_rndperm.png}
+	\caption{Structured problem. Only random permutation and no preconditioning.}
 	\label{fig:struct_nop_r}
 \end{figure*}
 
 \begin{figure*}[h]
-	\caption{Structured Matrix. Preconditioning, No Random Permutation}
 	\includegraphics[width=\textwidth]{../figures/struct_precond_norndperm.png}
+	\caption{Structured problem. Only preconditioning and  no random permutation}
 	\label{fig:struct_p_nor}
 \end{figure*}
 
