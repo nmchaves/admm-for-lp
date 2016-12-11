@@ -71,23 +71,27 @@ or its dual
 \text{subject to } &\quad  A^T \mathbf{y}  + \mathbf{s} = \mathbf{c},  \nonumber \\
 &\quad \mathbf{s} \geq \mathbf{0} \nonumber.
 \end{align}
-In this report, we first re-formulate the problems to solve for closed form updates on the primal and the dual LP problems. We alternatively consider the same respective formulation using the interior-point method. Along with these different kinds of implementations, we are specifically interested in the effect of preconditioning and block-splitting on the convergence rate and the accuracy of the solvers. We implemented all the algorithms in MATLAB and ran extensive experiments to test how these methods perform on different simulated problems.
+In this report, we first re-formulate the problems to solve for closed form updates on the primal and the dual LP problems. We then approach each problem using the corresponding interior-point method. For each of these four approaches, we are specifically interested in the effect of preconditioning and block-splitting on the convergence rate and the accuracy of the solvers. We implemented all of the algorithms in MATLAB and ran extensive experiments to test how these methods perform on different simulated problems.
 
 %%%%%%%%%%
 \vspace{0.1in}
 \subsection*{Preconditioning}
-For the analysis on our various implementations of ADMM, we are also interested in the impact of pre-conditioning the problem. Pre-conditioning involves computing 
+In this report, we demonstrate the effect of pre-conditioning on the various ADMM approaches mentioned above. To pre-condition a linear programming problem, one first computes 
 \begin{align}
 A' = (AA^T )^{-1/2}A , \quad \quad \mathbf{b}' =(AA^T )^{-1/2}\mathbf{b},
 \end{align}
-and substituting $A'$ and $\mathbf{b}'$ for $A$ and $\mathbf{b}$ in the original problems \eqref{OPT1} and \eqref{OPT2}. Clearly, this re-formulation does not change the feasible regions for  \eqref{OPT1} or \eqref{OPT2}. 
+and then substitutes $A'$ and $\mathbf{b}'$ for $A$ and $\mathbf{b}$ in the original problems \eqref{OPT1} and \eqref{OPT2}. Clearly, this re-formulation does not change the feasible regions for  \eqref{OPT1} or \eqref{OPT2}. 
 
 %%%%%%%%%%
 \vspace{0.1in}
 %%%%%%%%%%
 \vspace{0.1in}
 \subsection*{Block-Splitting ADMM}
-{\color{red} ADD MORE INTRO ABOUT BLOCK SPLITTING}
+In this report, we also demonstrate the effect of block-splitting ADMM. As we will show in Section 2, ADMM requires computation of a matrix inverse. Since matrix inversion is approximately cubic in complexity, this pre-computation may slow down the algorithm for sufficiently large problems. By splitting the decision variables into blocks and updating the blocks sequentially, one can reduce the runtime by computing multiple small matrix inverses instead of a single large matrix inverse.
+
+We demonstrate that block splitting with 3 or more blocks does not necessarily lead to a convergent solution. However, we demonstrate through experiments that randomly permuting the update order of the blocks at each iteration resolves this issue.
+
+We also demonstrate that block splitting and preconditioning work well when used together. However, the preconditioning approach described above requires a matrix inverse computation. Therefore, one still may suffer from a slow matrix inversion if one uses preconditioning. However, one may use an inverse-free pre-conditioning method such as Cholesky pre-conditioning. We plan to study this procedure in a future work.
 
 %%%%%%%%%%
 \vspace{0.1in}
