@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  11 DEC 2016 00:57
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  11 DEC 2016 14:01
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -841,85 +841,131 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 ]
 [2] [3] [4] [5] [6]
-<../figures/noprecond_norndperm.png, id=126, 513.3579pt x 402.7848pt>
+<../figures/noprecond_norndperm.png, id=131, 513.3579pt x 402.7848pt>
 File: ../figures/noprecond_norndperm.png Graphic file (type png)
 
 <use ../figures/noprecond_norndperm.png>
 Package pdftex.def Info: ../figures/noprecond_norndperm.png used on input line 
-415.
+399.
 (pdftex.def)             Requested size: 469.75502pt x 368.58136pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<../figures/noprecond_rndperm.png, id=128, 513.3579pt x 402.7848pt>
+[7] <../figures/noprecond_rndperm.png, id=148, 513.3579pt x 402.7848pt>
 File: ../figures/noprecond_rndperm.png Graphic file (type png)
 
 <use ../figures/noprecond_rndperm.png>
-Package pdftex.def Info: ../figures/noprecond_rndperm.png used on input line 42
-5.
+Package pdftex.def Info: ../figures/noprecond_rndperm.png used on input line 40
+9.
 (pdftex.def)             Requested size: 469.75502pt x 368.58136pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<../figures/precond_norndperm.png, id=130, 513.3579pt x 402.7848pt>
+<../figures/precond_norndperm.png, id=150, 513.3579pt x 402.7848pt>
 File: ../figures/precond_norndperm.png Graphic file (type png)
 
 <use ../figures/precond_norndperm.png>
-Package pdftex.def Info: ../figures/precond_norndperm.png used on input line 43
-6.
+Package pdftex.def Info: ../figures/precond_norndperm.png used on input line 42
+0.
 (pdftex.def)             Requested size: 469.75502pt x 368.58136pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[7] [8 <../figures/noprecond_norndperm.png (PNG copy)>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 454.
- [9 <../figures/noprecond_rndperm.png (PNG copy)>] [10 <../figures/precond_norn
-dperm.png (PNG copy)>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 454.
+[8 <../figures/noprecond_norndperm.png (PNG copy)>]
+<../figures/struct_prob.png, id=162, 493.3632pt x 258.4857pt>
+File: ../figures/struct_prob.png Graphic file (type png)
 
+<use ../figures/struct_prob.png>
+Package pdftex.def Info: ../figures/struct_prob.png used on input line 429.
+(pdftex.def)             Requested size: 469.75502pt x 246.12402pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<../figures/struct_noprecond_norndperm.png, id=168, 513.3579pt x 197.0562pt>
+File: ../figures/struct_noprecond_norndperm.png Graphic file (type png)
+
+<use ../figures/struct_noprecond_norndperm.png>
+Package pdftex.def Info: ../figures/struct_noprecond_norndperm.png used on inpu
+t line 439.
+(pdftex.def)             Requested size: 469.75502pt x 180.32268pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<../figures/struct_noprecond_rndperm.png, id=171, 513.3579pt x 197.0562pt>
+File: ../figures/struct_noprecond_rndperm.png Graphic file (type png)
+
+<use ../figures/struct_noprecond_rndperm.png>
+Package pdftex.def Info: ../figures/struct_noprecond_rndperm.png used on input 
+line 447.
+(pdftex.def)             Requested size: 469.75502pt x 180.32268pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<../figures/struct_precond_norndperm.png, id=172, 513.3579pt x 197.0562pt>
+File: ../figures/struct_precond_norndperm.png Graphic file (type png)
+
+<use ../figures/struct_precond_norndperm.png>
+Package pdftex.def Info: ../figures/struct_precond_norndperm.png used on input 
+line 453.
+(pdftex.def)             Requested size: 469.75502pt x 180.32268pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[9 <../figures/noprecond_rndperm.png (PNG copy)>] [10 <../figures/precond_nornd
+perm.png (PNG copy)>] [11 <../figures/struct_prob.png (PNG copy)>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 477.
+ [12 <../figures/struct_noprecond_norndperm.png (PNG copy)> <../figures/struct_
+noprecond_rndperm.png (PNG copy)>] [13 <../figures/struct_precond_norndperm.png
+ (PNG copy)>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 477.
 (./derivations.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 454.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 454.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 477.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 477.
 Package rerunfilecheck Info: File `derivations.out' has not changed.
-(rerunfilecheck)             Checksum: 5EE071487CF9986DDD78C0B2F2E41183;280.
+(rerunfilecheck)             Checksum: DFD9E0288C61BAD5E49CD053EF7BE664;382.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 454.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 477.
  ) 
 Here is how much of TeX's memory you used:
- 19308 strings out of 493089
- 362355 string characters out of 6134842
- 440195 words of memory out of 5000000
- 22384 multiletter control sequences out of 15000+600000
- 14051 words of font info for 53 fonts, out of 8000000 for 9000
+ 19346 strings out of 493089
+ 363341 string characters out of 6134842
+ 440531 words of memory out of 5000000
+ 22408 multiletter control sequences out of 15000+600000
+ 14672 words of font info for 55 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,13n,56p,908b,357s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,13n,56p,912b,361s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></
 usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></u
 sr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></us
-r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/
-local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/lo
-cal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/loca
-l/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/
-texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/te
-xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texli
-ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/
-2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive
-/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/
-2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/20
-15/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/201
-5/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on derivations.pdf (10 pages, 1145562 bytes).
+r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr
+/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/l
+ocal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/loc
+al/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local
+/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/t
+exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/tex
+live/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texliv
+e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2
+015/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/
+2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2
+015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/201
+5/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2015
+/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on derivations.pdf (13 pages, 1503637 bytes).
 PDF statistics:
- 229 PDF objects out of 1000 (max. 8388607)
- 195 compressed objects within 2 object streams
- 64 named destinations out of 1000 (max. 500000)
- 68 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 272 PDF objects out of 1000 (max. 8388607)
+ 229 compressed objects within 3 object streams
+ 72 named destinations out of 1000 (max. 500000)
+ 104 words of extra memory for PDF output out of 10000 (max. 10000000)
 
