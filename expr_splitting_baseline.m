@@ -13,7 +13,7 @@ MAX_ITER = 5e3; % max # of iterations
 TOL = 1e-3;     % tolerance
 beta = 0.9;     % parameter (for augmenting lagrangian)
 gamma = 0.99;
-precondition = true;
+precondition = false;
 rnd_permute = false; % This would have no effect anyways
 verb = true;
 
