@@ -26,7 +26,7 @@ if length(BLOCKS) == 1 % only the number of blocks specified
 else  % the block assignment specified
     NUM_BLOCKS = max(BLOCKS);
     if verbose
-        disp(['Splitting into ',num2str(NUM_BLOCKS),'blocks according to block assignment']);
+        disp(['Splitting into ',num2str(NUM_BLOCKS),' blocks according to block assignment']);
     end
 end
 

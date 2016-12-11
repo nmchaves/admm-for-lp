@@ -55,7 +55,6 @@ end
 if verbose
     disp(['Generating feasible and bounded problem with m = ', ...
         num2str(m),', n = ',num2str(n),'.'])
-    figure
     imagesc(A)
 end
 
