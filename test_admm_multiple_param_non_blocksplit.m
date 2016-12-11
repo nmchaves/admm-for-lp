@@ -1,11 +1,12 @@
 clear;clc;close all
 %% Problem Paramters
 n = 100;     % # of variables
-m = 50;     % # of equality constraints
-N = 50;      % # number of problems to solve
+m = 20;      % # of equality constraints
+N = 10;      % # number of problems to solve
 
 %% Solver Paramters
-methods = {'primal','dual','primal ip','dual ip'}; % method names
+% methods = {'primal','dual','primal ip','dual ip'}; % method names
+methods = {'primal','dual'}; % method names
 s = 0;        % solver seed
 MIT = 1e4;    % max # of iterations
 TOL = 1e-4;   % Tolerance for algorithm
@@ -65,15 +66,16 @@ for i_prob = 1:N
     end
 end
 
-save('test_large_admm_precond.mat','result','methods','all_beta')
+save('test_small_admm_precond.mat','result','methods','all_beta')
 
 %% Plot Results
+load('test_small_admm_precond.mat')
 figure
 subplot(1,2,1)
-plot_errorbar_param_conv(result(:,1),all_beta,methods, [0,5000])
+plot_errorbar_param_conv(result(:,1),all_beta,methods, [0,5000],'\beta')
 title('without pre-conditioning')
 subplot(1,2,2)
 title('with preconditioning')
-plot_errorbar_param_conv(result(:,2),all_beta,methods, [0,5000])
+plot_errorbar_param_conv(result(:,2),all_beta,methods, [0,5000],'\beta')
 
 
