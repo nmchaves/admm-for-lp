@@ -60,9 +60,9 @@ s = ones(n, 1);
 x = -rand(n, 1);
 
 % Split data into blocks
-y_blocks = split_blocks(y, NUM_BLOCKS, 'vertical');
-A_blocks = split_blocks(A, NUM_BLOCKS, 'vertical');
-b_blocks = split_blocks(b, NUM_BLOCKS, 'vertical');
+y_blocks = split_blocks(y, BLOCKS, 'vertical');
+A_blocks = split_blocks(A, BLOCKS, 'vertical');
+b_blocks = split_blocks(b, BLOCKS, 'vertical');
 
 % Precompute inverses on smaller matrices
 AAT_inv_blocks = cell(NUM_BLOCKS, 1);

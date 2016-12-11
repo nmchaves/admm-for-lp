@@ -31,7 +31,7 @@ if length(BLOCKS) == 1 % only the number of blocks specified
 else  % the block assignment specified
     NUM_BLOCKS = max(BLOCKS);
     if verbose
-        disp(['Splitting into ',num2str(NUM_BLOCKS),'blocks according to block assignment']);
+        disp(['Splitting into ',num2str(NUM_BLOCKS),' blocks according to block assignment']);
     end
 end
 
@@ -67,11 +67,11 @@ x1 = randn(n, 1);
 x2 = rand(n, 1);
 
 % Split data into blocks
-x1_blocks = splitMatIntoBlocks(x1, NUM_BLOCKS, 'vertical');
-A_blocks = splitMatIntoBlocks(A, NUM_BLOCKS, 'horizontal');
-x2_blocks = splitMatIntoBlocks(x2, NUM_BLOCKS, 'vertical');
-c_blocks = splitMatIntoBlocks(c, NUM_BLOCKS, 'vertical');
-s_blocks = splitMatIntoBlocks(s, NUM_BLOCKS, 'vertical');
+x1_blocks = split_blocks(x1, BLOCKS, 'vertical');
+A_blocks = split_blocks(A, BLOCKS, 'horizontal');
+x2_blocks = split_blocks(x2, BLOCKS, 'vertical');
+c_blocks = split_blocks(c, BLOCKS, 'vertical');
+s_blocks = split_blocks(s, BLOCKS, 'vertical');
 
 % Compute inverses on smaller matrices
 ATA_plus_I_inv_blocks = cell(NUM_BLOCKS, 1);
