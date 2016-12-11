@@ -1,7 +1,7 @@
 clear;clc;close all
 %% Problem Paramters
-n = 100;     % # of variables
-m = 20;      % # of equality constraints
+n = 300;     % # of variables
+m = 50;      % # of equality constraints
 N = 10;      % # number of problems to solve
 
 %% Solver Paramters
@@ -9,11 +9,11 @@ N = 10;      % # number of problems to solve
 methods = {'primal','dual'}; % method names
 s = 0;        % solver seed
 MIT = 1e4;    % max # of iterations
-TOL = 1e-4;   % Tolerance for algorithm
-corr_tol = 0.01; % Tolerance for correctness
+TOL = 1e-3;   % Tolerance for algorithm
+corr_tol = 0.1; % Tolerance for correctness
 g = 0.1;     % rate for change in mu (for interior point methods)
 
-all_beta = 0.5:0.05:0.9;
+all_beta = 0.2:0.1:0.9;
 
 %% Initialization
 single_result = zeros(length(all_beta),N);
@@ -53,7 +53,7 @@ for i_prob = 1:N
                     if p
                         disp('Using Preconditioning')
                     end
-                    disp(['Converged at:', length(eh)])
+                    disp(['Converged at:', num2str(length(eh))])
                     warning('Incorrect Solution!')
                     % store the number of steps used for convergence
                     result{i_method,i_precond}(i_beta,i_prob) = -1;
@@ -66,16 +66,17 @@ for i_prob = 1:N
     end
 end
 
-save('test_small_admm_precond.mat','result','methods','all_beta')
+save('test_large_admm_precond.mat','result','methods','all_beta')
 
 %% Plot Results
-load('test_small_admm_precond.mat')
-figure
+load('test_large_admm_precond.mat')
+
+figure('Position', [100, 100, 500, 200]);
 subplot(1,2,1)
-plot_errorbar_param_conv(result(:,1),all_beta,methods, [0,5000],'\beta')
-title('without pre-conditioning')
+plot_errorbar_param_conv(result(:,1),all_beta,methods, [0,10000],'\beta')
+title('without preconditioning')
 subplot(1,2,2)
 title('with preconditioning')
-plot_errorbar_param_conv(result(:,2),all_beta,methods, [0,5000],'\beta')
-
-
+plot_errorbar_param_conv(result(:,2),all_beta,methods, [0,10000],'\beta')
+fname = 'primal_dual_preconditioning';
+save_current_figure(['figures/',fname],'high','-png');
