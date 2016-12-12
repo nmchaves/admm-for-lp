@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  11 DEC 2016 14:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  11 DEC 2016 16:11
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -708,11 +708,7 @@ less on input line 35.
 Package Fancyhdr Warning: \fancyfoot's `E' option without twoside option is use
 less on input line 37.
 
-(./derivations.aux
-
-LaTeX Warning: Label `fig:nop_nor' multiply defined.
-
-)
+(./derivations.aux)
 \openout1 = `derivations.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 50.
@@ -729,7 +725,8 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 50.
 LaTeX Font Info:    ... okay on input line 50.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 50.
 LaTeX Font Info:    ... okay on input line 50.
- (/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
+
+(/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count150
 \scratchdimen=\dimen188
@@ -841,139 +838,170 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 ]
 [2] [3] [4] [5] [6]
-<../figures/primal_dual_preconditioning.png, id=131, 433.62pt x 198.2607pt>
+<../figures/primal_dual_preconditioning.png, id=133, 433.62pt x 198.2607pt>
 File: ../figures/primal_dual_preconditioning.png Graphic file (type png)
 
 <use ../figures/primal_dual_preconditioning.png>
 Package pdftex.def Info: ../figures/primal_dual_preconditioning.png used on inp
-ut line 396.
-(pdftex.def)             Requested size: 328.82707pt x 150.35297pt.
+ut line 372.
+(pdftex.def)             Requested size: 375.80544pt x 171.83499pt.
 
-<../figures/noprecond_norndperm.png, id=133, 513.3579pt x 402.7848pt>
+Underfull \hbox (badness 10000) in paragraph at lines 366--376
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 366--376
+
+ []
+
+[7 <../figures/primal_dual_preconditioning.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 378--383
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--383
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--383
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--383
+
+ []
+
+<../figures/noprecond_norndperm.png, id=144, 513.3579pt x 402.7848pt>
 File: ../figures/noprecond_norndperm.png Graphic file (type png)
 
 <use ../figures/noprecond_norndperm.png>
 Package pdftex.def Info: ../figures/noprecond_norndperm.png used on input line 
-405.
+385.
 (pdftex.def)             Requested size: 469.75502pt x 368.58136pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[7] <../figures/noprecond_rndperm.png, id=151, 513.3579pt x 402.7848pt>
+ [8 <../figures/noprecond_norndperm.png (PNG copy)>]
+<../figures/noprecond_rndperm.png, id=152, 513.3579pt x 402.7848pt>
 File: ../figures/noprecond_rndperm.png Graphic file (type png)
 
 <use ../figures/noprecond_rndperm.png>
-Package pdftex.def Info: ../figures/noprecond_rndperm.png used on input line 41
-5.
+Package pdftex.def Info: ../figures/noprecond_rndperm.png used on input line 39
+8.
 (pdftex.def)             Requested size: 469.75502pt x 368.58136pt.
 
+Underfull \hbox (badness 10000) in paragraph at lines 392--402
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+ []
 
-<../figures/precond_norndperm.png, id=153, 513.3579pt x 402.7848pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 392--402
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 392--402
+
+ []
+
+[9 <../figures/noprecond_rndperm.png (PNG copy)>]
+<../figures/precond_norndperm.png, id=160, 513.3579pt x 402.7848pt>
 File: ../figures/precond_norndperm.png Graphic file (type png)
 
 <use ../figures/precond_norndperm.png>
-Package pdftex.def Info: ../figures/precond_norndperm.png used on input line 42
-6.
+Package pdftex.def Info: ../figures/precond_norndperm.png used on input line 41
+2.
 (pdftex.def)             Requested size: 469.75502pt x 368.58136pt.
 
+Underfull \hbox (badness 10000) in paragraph at lines 406--416
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+ []
 
-<../figures/struct_prob.png, id=156, 493.3632pt x 258.4857pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 406--416
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 406--416
+
+ []
+
+[10 <../figures/precond_norndperm.png (PNG copy)>]
+<../figures/struct_prob.png, id=170, 493.3632pt x 258.4857pt>
 File: ../figures/struct_prob.png Graphic file (type png)
 
 <use ../figures/struct_prob.png>
-Package pdftex.def Info: ../figures/struct_prob.png used on input line 436.
+Package pdftex.def Info: ../figures/struct_prob.png used on input line 428.
 (pdftex.def)             Requested size: 375.80544pt x 196.9008pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<../figures/struct_noprecond_norndperm.png, id=162, 513.3579pt x 197.0562pt>
+ [11 <../figures/struct_prob.png (PNG copy)>]
+<../figures/struct_noprecond_norndperm.png, id=188, 513.3579pt x 197.0562pt>
 File: ../figures/struct_noprecond_norndperm.png Graphic file (type png)
 
 <use ../figures/struct_noprecond_norndperm.png>
 Package pdftex.def Info: ../figures/struct_noprecond_norndperm.png used on inpu
-t line 446.
-(pdftex.def)             Requested size: 469.75502pt x 180.32268pt.
+t line 443.
+(pdftex.def)             Requested size: 422.77664pt x 162.2877pt.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<../figures/struct_noprecond_rndperm.png, id=165, 513.3579pt x 197.0562pt>
+<../figures/struct_noprecond_rndperm.png, id=189, 513.3579pt x 197.0562pt>
 File: ../figures/struct_noprecond_rndperm.png Graphic file (type png)
 
 <use ../figures/struct_noprecond_rndperm.png>
 Package pdftex.def Info: ../figures/struct_noprecond_rndperm.png used on input 
-line 454.
-(pdftex.def)             Requested size: 469.75502pt x 180.32268pt.
+line 449.
+(pdftex.def)             Requested size: 422.77664pt x 162.2877pt.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<../figures/struct_precond_norndperm.png, id=166, 513.3579pt x 197.0562pt>
+<../figures/struct_precond_norndperm.png, id=190, 513.3579pt x 197.0562pt>
 File: ../figures/struct_precond_norndperm.png Graphic file (type png)
 
 <use ../figures/struct_precond_norndperm.png>
 Package pdftex.def Info: ../figures/struct_precond_norndperm.png used on input 
-line 460.
-(pdftex.def)             Requested size: 469.75502pt x 180.32268pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[8 <../figures/primal_dual_preconditioning.png (PNG copy)>] [9 <../figures/nopr
-econd_norndperm.png (PNG copy)>] [10 <../figures/noprecond_rndperm.png (PNG cop
-y)>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 485.
- [11 <../figures/precond_norndperm.png (PNG copy)> <../figures/struct_prob.png 
-(PNG copy)>] [12 <../figures/struct_noprecond_norndperm.png (PNG copy)> <../fig
-ures/struct_noprecond_rndperm.png (PNG copy)> <../figures/struct_precond_norndp
-erm.png (PNG copy)>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 485.
+line 455.
+(pdftex.def)             Requested size: 422.77664pt x 162.2877pt.
+ [12 <../figures/struct_noprecond_norndperm.png (PNG copy)> <../figures/struct_
+noprecond_rndperm.png (PNG copy)> <../figures/struct_precond_norndperm.png (PNG
+ copy)>] [13]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 478.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 478.
  (./derivations.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 485.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 485.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 478.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 478.
 Package rerunfilecheck Info: File `derivations.out' has not changed.
 (rerunfilecheck)             Checksum: DFD9E0288C61BAD5E49CD053EF7BE664;382.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 478.
+ )
+(\end occurred inside a group at level 1)
 
-
-LaTeX Warning: There were multiply-defined labels.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 485.
- ) 
+### simple group (level 1) entered at line 345 ({)
+### bottom level 
 Here is how much of TeX's memory you used:
- 19352 strings out of 493089
- 363583 string characters out of 6134842
- 440756 words of memory out of 5000000
- 22413 multiletter control sequences out of 15000+600000
- 14672 words of font info for 55 fonts, out of 8000000 for 9000
+ 19346 strings out of 493089
+ 363520 string characters out of 6134842
+ 440785 words of memory out of 5000000
+ 22410 multiletter control sequences out of 15000+600000
+ 13705 words of font info for 52 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,13n,56p,912b,361s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
-></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
-</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></
-usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></u
-sr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></us
-r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr
-/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/l
-ocal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/loc
-al/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local
-/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/t
-exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/tex
-live/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texliv
-e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2
-015/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/
-2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2
-015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/201
-5/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2015
-/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on derivations.pdf (12 pages, 1616301 bytes).
+ 55i,13n,56p,912b,382s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmbx10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmbx7.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmex10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+mi5.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi
+7.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.
+pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pf
+b></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></u
+sr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/
+local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr
+/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/
+local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/lo
+cal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on derivations.pdf (13 pages, 1602238 bytes).
 PDF statistics:
- 270 PDF objects out of 1000 (max. 8388607)
+ 269 PDF objects out of 1000 (max. 8388607)
  227 compressed objects within 3 object streams
  72 named destinations out of 1000 (max. 500000)
  109 words of extra memory for PDF output out of 10000 (max. 10000000)
