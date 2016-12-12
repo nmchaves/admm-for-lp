@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  11 DEC 2016 20:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  11 DEC 2016 21:13
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -824,10 +824,6 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 52.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 10000) in paragraph at lines 59--63
-
- []
-
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.0pt.
@@ -837,168 +833,165 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 [1{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-[2] [3] [4] [5] [6]
-<../figures/primal_dual_preconditioning.png, id=133, 433.62pt x 198.2607pt>
+[2] [3] [4] [5] [6] [7]
+<../figures/primal_dual_preconditioning.png, id=138, 433.62pt x 198.2607pt>
 File: ../figures/primal_dual_preconditioning.png Graphic file (type png)
 
 <use ../figures/primal_dual_preconditioning.png>
 Package pdftex.def Info: ../figures/primal_dual_preconditioning.png used on inp
-ut line 372.
+ut line 373.
 (pdftex.def)             Requested size: 375.80544pt x 171.83499pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 366--376
+Underfull \hbox (badness 10000) in paragraph at lines 367--377
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 366--376
+Underfull \hbox (badness 10000) in paragraph at lines 367--377
 
  []
 
-[7 <../figures/primal_dual_preconditioning.png (PNG copy)>]
-Underfull \hbox (badness 10000) in paragraph at lines 378--383
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 378--383
+[8 <../figures/primal_dual_preconditioning.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 379--384
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 378--383
+Underfull \hbox (badness 10000) in paragraph at lines 379--384
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 378--383
+Underfull \hbox (badness 10000) in paragraph at lines 379--384
 
  []
 
-<../figures/noprecond_norndperm.png, id=144, 513.3579pt x 402.7848pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 379--384
+
+ []
+
+<../figures/noprecond_norndperm.png, id=148, 513.3579pt x 402.7848pt>
 File: ../figures/noprecond_norndperm.png Graphic file (type png)
 
 <use ../figures/noprecond_norndperm.png>
 Package pdftex.def Info: ../figures/noprecond_norndperm.png used on input line 
-385.
+386.
 (pdftex.def)             Requested size: 469.75502pt x 368.58136pt.
- [8 <../figures/noprecond_norndperm.png (PNG copy)>]
-<../figures/noprecond_rndperm.png, id=152, 513.3579pt x 402.7848pt>
+ [9 <../figures/noprecond_norndperm.png (PNG copy)>]
+<../figures/noprecond_rndperm.png, id=156, 513.3579pt x 402.7848pt>
 File: ../figures/noprecond_rndperm.png Graphic file (type png)
 
 <use ../figures/noprecond_rndperm.png>
 Package pdftex.def Info: ../figures/noprecond_rndperm.png used on input line 39
-8.
+9.
 (pdftex.def)             Requested size: 469.75502pt x 368.58136pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 392--402
+Underfull \hbox (badness 10000) in paragraph at lines 393--403
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 392--402
+Underfull \hbox (badness 10000) in paragraph at lines 393--403
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 392--402
+Underfull \hbox (badness 10000) in paragraph at lines 393--403
 
  []
 
-[9 <../figures/noprecond_rndperm.png (PNG copy)>]
-<../figures/precond_norndperm.png, id=160, 513.3579pt x 402.7848pt>
+[10 <../figures/noprecond_rndperm.png (PNG copy)>]
+<../figures/precond_norndperm.png, id=164, 513.3579pt x 402.7848pt>
 File: ../figures/precond_norndperm.png Graphic file (type png)
 
 <use ../figures/precond_norndperm.png>
 Package pdftex.def Info: ../figures/precond_norndperm.png used on input line 41
-2.
+3.
 (pdftex.def)             Requested size: 469.75502pt x 368.58136pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 406--416
+Underfull \hbox (badness 10000) in paragraph at lines 407--417
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 406--416
+Underfull \hbox (badness 10000) in paragraph at lines 407--417
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 406--416
+Underfull \hbox (badness 10000) in paragraph at lines 407--417
 
  []
 
-[10 <../figures/precond_norndperm.png (PNG copy)>]
-<../figures/variable_cycling_analysis.png, id=170, 432.4155pt x 242.3454pt>
+[11 <../figures/precond_norndperm.png (PNG copy)>]
+<../figures/variable_cycling_analysis.png, id=174, 432.4155pt x 242.3454pt>
 File: ../figures/variable_cycling_analysis.png Graphic file (type png)
 
 <use ../figures/variable_cycling_analysis.png>
 Package pdftex.def Info: ../figures/variable_cycling_analysis.png used on input
- line 430.
+ line 431.
 (pdftex.def)             Requested size: 375.80544pt x 210.6206pt.
 
-<../figures/struct_prob.png, id=173, 493.3632pt x 258.4857pt>
+<../figures/struct_prob.png, id=177, 493.3632pt x 258.4857pt>
 File: ../figures/struct_prob.png Graphic file (type png)
 
 <use ../figures/struct_prob.png>
-Package pdftex.def Info: ../figures/struct_prob.png used on input line 443.
-(pdftex.def)             Requested size: 375.80544pt x 196.9008pt.
+Package pdftex.def Info: ../figures/struct_prob.png used on input line 444.
+(pdftex.def)             Requested size: 328.82707pt x 172.28523pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[11 <../figures/variable_cycling_analysis.png (PNG copy)>]
-<../figures/struct_noprecond_norndperm.png, id=191, 513.3579pt x 197.0562pt>
+[12 <../figures/variable_cycling_analysis.png (PNG copy)>]
+<../figures/struct_noprecond_norndperm.png, id=195, 513.3579pt x 197.0562pt>
 File: ../figures/struct_noprecond_norndperm.png Graphic file (type png)
 
 <use ../figures/struct_noprecond_norndperm.png>
 Package pdftex.def Info: ../figures/struct_noprecond_norndperm.png used on inpu
-t line 469.
+t line 470.
 (pdftex.def)             Requested size: 422.77664pt x 162.2877pt.
- [12 <../figures/struct_prob.png (PNG copy)>]
-<../figures/struct_noprecond_rndperm.png, id=197, 513.3579pt x 197.0562pt>
+
+<../figures/struct_noprecond_rndperm.png, id=196, 513.3579pt x 197.0562pt>
 File: ../figures/struct_noprecond_rndperm.png Graphic file (type png)
 
 <use ../figures/struct_noprecond_rndperm.png>
 Package pdftex.def Info: ../figures/struct_noprecond_rndperm.png used on input 
-line 475.
+line 476.
 (pdftex.def)             Requested size: 422.77664pt x 162.2877pt.
 
-<../figures/struct_precond_norndperm.png, id=198, 513.3579pt x 197.0562pt>
+<../figures/struct_precond_norndperm.png, id=197, 513.3579pt x 197.0562pt>
 File: ../figures/struct_precond_norndperm.png Graphic file (type png)
 
 <use ../figures/struct_precond_norndperm.png>
 Package pdftex.def Info: ../figures/struct_precond_norndperm.png used on input 
-line 481.
+line 482.
 (pdftex.def)             Requested size: 422.77664pt x 162.2877pt.
- [13 <../figures/struct_noprecond_norndperm.png (PNG copy)> <../figures/struct_
+ [13 <../figures/struct_prob.png (PNG copy)>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 492.
+ [14 <../figures/struct_noprecond_norndperm.png (PNG copy)> <../figures/struct_
 noprecond_rndperm.png (PNG copy)> <../figures/struct_precond_norndperm.png (PNG
  copy)>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 491.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 491.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 492.
  (./derivations.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 491.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 491.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 492.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 492.
 Package rerunfilecheck Info: File `derivations.out' has not changed.
 (rerunfilecheck)             Checksum: DFD9E0288C61BAD5E49CD053EF7BE664;382.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 491.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 492.
  )
 (\end occurred inside a group at level 1)
 
-### simple group (level 1) entered at line 345 ({)
+### simple group (level 1) entered at line 346 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 19353 strings out of 493089
- 363762 string characters out of 6134842
- 441842 words of memory out of 5000000
+ 19354 strings out of 493089
+ 363769 string characters out of 6134842
+ 440843 words of memory out of 5000000
  22415 multiletter control sequences out of 15000+600000
  13705 words of font info for 52 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,13n,56p,912b,413s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,13n,56p,981b,392s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmbx10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/c
@@ -1015,10 +1008,10 @@ local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr
 /local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/
 local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/lo
 cal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on derivations.pdf (13 pages, 1772295 bytes).
+Output written on derivations.pdf (14 pages, 1774027 bytes).
 PDF statistics:
- 275 PDF objects out of 1000 (max. 8388607)
- 232 compressed objects within 3 object streams
- 73 named destinations out of 1000 (max. 500000)
+ 279 PDF objects out of 1000 (max. 8388607)
+ 235 compressed objects within 3 object streams
+ 74 named destinations out of 1000 (max. 500000)
  114 words of extra memory for PDF output out of 10000 (max. 10000000)
 

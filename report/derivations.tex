@@ -57,15 +57,14 @@
 %%%%%%
 \section{Introduction}
 The alternating direction method of multipliers (ADMM) is a first-order method that can be used to solve various optimization problems. It splits the original problem into smaller pieces, resulting in an easier update procedure. ADMM uses the augmented Lagrangian method to robustify the problem, and the splitting procedure makes it a proximal method that can be adopted in a wide range of optimization problems.
-\newline
-\newline
+
 The goal of this project is to use ADMM to solve the primal linear programming  (LP) problem:
 \begin{align}
 \text{minimize}_{\mathbf{x}} &\quad \mathbf{c}^T\mathbf{x} \tag{OPT1}\label{OPT1} \\
 \text{subject to } &\quad  A \mathbf{x} = \mathbf{b},  \nonumber \\
 &\quad \mathbf{x} \geq \mathbf{0} \nonumber 
 \end{align}
-or its dual
+and its dual
 \begin{align}
 \text{maximize}_{\mathbf{y}, \mathbf{s}} &\quad \mathbf{b}^T\mathbf{y}  \tag{OPT2}\label{OPT2} \\
 \text{subject to } &\quad  A^T \mathbf{y}  + \mathbf{s} = \mathbf{c},  \nonumber \\
@@ -89,13 +88,14 @@ and then substitutes $A'$ and $\mathbf{b}'$ for $A$ and $\mathbf{b}$ in the orig
 \subsection*{Block-Splitting ADMM}
 As we will show in Section 2, ADMM requires computation of a potentially large matrix inverse. Since matrix inversion is approximately cubic in complexity, this computation may become the bottleneck for sufficiently large problems. By splitting the decision variables into blocks and updating the blocks sequentially, one can reduce the runtime by computing multiple small matrix inverses instead of a single large matrix inverse.
 
-In this report, we demonstrate the effect of block splitting on ADMM. We demonstrate that block splitting with 3 or more blocks may not converge to the optimal solution. However, we demonstrate through experiments that randomly permuting the update order of the blocks at each iteration resolves this issue.
+In this report, we analyze the effect of block splitting on ADMM. With two specific examples, we demonstrate that block splitting with 3 or more blocks may not converge to the optimal solution. However, we demonstrate through experiments that randomly permuting the update order of the blocks at each iteration resolves this issue.
 
 We also demonstrate that block splitting and preconditioning work well when used together. However, the preconditioning approach we consider in this report requires a matrix inverse computation. Therefore, one still may suffer from a slow matrix inversion if one uses preconditioning. In our future work, we plan to study inverse-free preconditioning methods such as Cholesky preconditioning.
 
 %%%%%%%%%%
-\vspace{0.5in}
+\vspace{0.2in}
 \section{Basic ADMM for LP}
+In this section, we provide re-formulations to enable us to easily solve the LP for the primal and dual problems. We derive the basic algorithms which include update steps and convergence criteria. (For all the algorithms we introduce, we use random feasible initialization for the variables, but better initialization techniques could be explored if one has more information about the structure of the problems.) Furthermore, the majority of the basic update equations derived here will be extended to the multi-block ADMM updates in Section 4.
 \vspace{0.1in}
 \subsection*{Primal Re-formulation}
 We re-formulate the primal LP problem as:
@@ -187,8 +187,9 @@ We terminate and declare optimality when $A \mathbf{x}^{k+1} + \mathbf{b} \appro
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\vspace{0.5in}
+\vspace{0.2in}
 \section{Interior-Point ADMM for LP}
+The interior-point method is alternative way to handle the non-negative constraints in LP problems by including the log-barrier function in the objective function. In this section, we derive the update formulas, whereas the remaining details of the algorithms follow from the basic ADMM in Section 2.  We include the interior-point method here as the derivation from the re-formulation is straightforward. However, we did not extensively test the convergence behavior of the interior-point methods because the focus of the project is multi-block ADMM and we found empirically that interior-point ADMM yielded highly similar results to the basic ADMM.
 
 \vspace{0.1in}
 \subsection*{Primal LP Updates}
@@ -241,7 +242,7 @@ The update equation for $\mathbf{x}$ remains the same as in \eqref{eq:x_dual_upd
 
 
 %%%%%%%%%%
-\vspace{0.5in}
+\vspace{0.2in}
 \section{Multi-Block ADMM}
 
 As mentioned previously, splitting the problem into blocks may reduce computation time by avoiding a large matrix inversion.
@@ -440,7 +441,7 @@ In this set of experiments, we evaluated the performance of each ADMM algorithm 
 
 \begin{figure*}[h]
 	\centering
-	\includegraphics[width=0.8\textwidth]{../figures/struct_prob.png}
+	\includegraphics[width=0.7\textwidth]{../figures/struct_prob.png}
 	\caption{Heatmap of Structured Matrix}
 	\label{fig:struct_prob}
 \end{figure*}
@@ -452,14 +453,14 @@ In Figure \ref{fig:struct_nop_nor}, the problem diverges when applying block spl
 
 As in the non-structured case, we can resolve this issue by randomly permuting the block update order or applying preconditioning. The results for each approach are shown in Figures \ref{fig:struct_nop_r} and \ref{fig:struct_p_nor}. In both cases, the problem converges in approximately the same number of iterations as the single block case. The results are particularly striking for the preconditioning approach. These results suggest that performing optimal block splitting along a structured matrix may improve the performance of ADMM. In our future work, we plan to study whether this holds true in general for structured matrices.
 
-\vspace{0.5in}
+\vspace{0.2in}
 \section{Conclusions and Future Work}
 
-We've evaluated the performance of several different versions of ADMM for linear programming problems. Our experiments show that one can split the problem into blocks without significantly increasing the number of iterations required to find an optimal solution. However, one must be sure to apply preconditioning to the problem or use a randomly permuted update order. Since block splitting allows one to avoid a large matrix inversion, our results suggest that these techniques may reduce the overall runtime of ADMM algorithms. We've also shown that block splitting seems especially well suited to problems with an inherent block structure, which commonly arise in practice.
+We evaluated the performance of several different versions of ADMM for linear programming problems. Our experiments show that one can split the problem into blocks without significantly increasing the number of iterations required to find an optimal solution. However, one must be sure to apply preconditioning to the problem or use a randomly permuted update order. Since block splitting allows one to avoid a large matrix inversion, our results suggest that these techniques may reduce the overall runtime of ADMM algorithms. We also found that block splitting seems especially well suited to problems with an inherent block structure, which commonly arise in practice.
 
-In our future work, we intend to run similar experiments on more problems to verify that the results are robust. We also intend to test each approach on problems with various sizes. It will be interesting to see how each approach scales as problems grow large. In the future, we plan to compare the runtime (not just the number of iterations) of each algorithm. This will enable us to determine whether avoiding the large matrix inverse actually leads to a speedup. Finally, we intend to experiment with inverse-free preconditioning methods, such as Cholesky preconditioning, to avoid the matrix inversion involved in our current preconditioning approach.
+In our future work, we intend to run similar experiments on more problems to verify that the results are robust. We also intend to test each approach on problems with various sizes. It will be interesting to see how each approach scales as problems grow large. We plan to compare the runtime (not just the number of iterations) of each algorithm, accounting for the time to take large matrix inversions. This will enable us to determine whether avoiding the large matrix inverse actually leads to a speedup. Finally, we intend to experiment with inverse-free preconditioning methods, such as Cholesky preconditioning, to avoid the matrix inversion involved in our current preconditioning approach. Indeed, we have shown cases where LP problems cannot be solved correctly without preconditioning or random-permutation on the block updates, and the results we present here on preconditioning make inverse-free preconditioning methods promising for multi-block ADMM.
 
-\vspace{0.5in}
+\vspace{0.2in}
 \section{Acknowledgements}
 
 We'd like to thank Professor Yinyu Ye for his mentorship and guidance throughout the project. 
