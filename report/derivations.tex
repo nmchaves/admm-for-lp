@@ -172,7 +172,7 @@ Setting the gradients with respect to $\mathbf{y}$ and $\mathbf{s}$ to zero, i.e
 \nabla_{\mathbf{y}}L^{d}(\mathbf{y},\mathbf{s},\mathbf{x}) & =  -\mathbf{b}-A\mathbf{x}+\beta A\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right)  = \mathbf{0}, \label{eq:dual_y} \\
 \nabla_{\mathbf{s}}L^{d}(\mathbf{y},\mathbf{s},\mathbf{x}) & =  -\mathbf{x}+\beta\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right) =  \mathbf{0},
 \end{align}
-we have the updates for $\mathbf{y}$ (least-squares problem) and $\mathbf{s}$:
+we have the updates for $\mathbf{y}$ and $\mathbf{s}$:
 \begin{align}\label{eq:y_dual_update}
 \mathbf{y}^{k+1} = \left(AA^{T}\right)^{-1}\left(\frac{1}{\beta}\left(A\mathbf{x}^{k}+\mathbf{b}\right)-A\mathbf{s}^{k}+A\mathbf{c}\right),
 \end{align}
@@ -349,7 +349,7 @@ A sufficient condition for the variables to be separable is when the coefficient
 \[
 A' (A')^T  = (AA^T )^{-1/2}A A^T (AA^T )^{-1/2} =  (AA^T )^{-1/2}(AA^T )^{1/2} (AA^T )^{1/2} (AA^T )^{-1/2}  = I.
 \]
-Therefore, the variables in $\mathbf{y}$ become separable and block-splitting the same result as non-block-splitting at the end of each iteration when preconditioning is applied. 
+Therefore, the variables in $\mathbf{y}$ become separable and block-splitting produces the same result as non-block-splitting at the end of each iteration when preconditioning is applied. We'll observe this effect in the Experiments section, which shows that the number of iterations required by the dual is independent of the number of blocks when preconditioning is applied.
 
 %%%%%%%%%%%%%%%%%%%%%
 \newpage
@@ -416,8 +416,23 @@ These results suggest that one should prefer to use the maximum number of blocks
 
 \newpage
 \subsection*{Analysis of Non-Converging Primal}
-{\color{red} TODO: consider filling this out.}
-In Figure \ref{fig:nop_nor}, we observed that the absolute error oscillates for \
+
+In Figure \ref{fig:nop_nor}, we observed that the absolute error oscillates for $B>2$ when random permutation and preconditioning are not applied. One may ask whether this a result of the decision variable cycling around the optimal solution but never converging. To address this question, we considered the results shown in Figure \ref{fig:nop_nor} for $B=2,3,10$.
+
+To visualize the cycling behavior of $\mathbf{x}$, we found the component of $\mathbf{x}$ with the highest variance over the last 1000 iterations of the $B=3$ case. Figure \ref{fig:x_over_time} below shows the value of this variable at each iteration for each block size $B=2,3,10$. Note that the right plot is simply a zoomed in version of the left plot. Further note that the horizontal black line at 0 represents the value of this variable at the optimal solution, which is approximately 0.
+
+We observe that the variable value indeed oscillates around the optimal value over time, but the oscillation is not symmetric. We also observe that the variable undergoes the largest swings for the $B=10$ case, even though this variable was selected based upon having a high variance in the $B=3$ case. This suggests that introducing more blocks may result in larger swings.
+
+Based on the intuition that $\mathbf{x}$ may be cycling ``around" the optimal solution, we computed the mean value of $\mathbf{x}$ over the last 1000 iterations and computed the corresponding objective value. However, the objective value only improved very slightly, and it was still far from the optimal objective value. 
+
+\begin{figure*}[h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{../figures/variable_cycling_analysis.png}
+	\caption{Variable Value over Time}
+	\label{fig:x_over_time}
+\end{figure*}
+
+
 
 
 \subsection*{Structured Problems}
@@ -436,6 +451,19 @@ In Figure \ref{fig:struct_nop_nor}, the problem diverges when applying block spl
 
 
 As in the non-structured case, we can resolve this issue by randomly permuting the block update order or applying preconditioning. The results for each approach are shown in Figures \ref{fig:struct_nop_r} and \ref{fig:struct_p_nor}. In both cases, the problem converges in approximately the same number of iterations as the single block case. The results are particularly striking for the preconditioning approach. These results suggest that performing optimal block splitting along a structured matrix may improve the performance of ADMM. In our future work, we plan to study whether this holds true in general for structured matrices.
+
+\vspace{0.5in}
+\section{Conclusions and Future Work}
+
+We've evaluated the performance of several different versions of ADMM for linear programming problems. Our experiments show that one can split the problem into blocks without significantly increasing the number of iterations required to find an optimal solution. However, one must be sure to apply preconditioning to the problem or use a randomly permuted update order. Since block splitting allows one to avoid a large matrix inversion, our results suggest that these techniques may reduce the overall runtime of ADMM algorithms. We've also shown that block splitting seems especially well suited to problems with an inherent block structure, which commonly arise in practice.
+
+In our future work, we intend to run similar experiments on more problems to verify that the results are robust. We also intend to test each approach on problems with various sizes. It will be interesting to see how each approach scales as problems grow large. In the future, we plan to compare the runtime (not just the number of iterations) of each algorithm. This will enable us to determine whether avoiding the large matrix inverse actually leads to a speedup. Finally, we intend to experiment with inverse-free preconditioning methods, such as Cholesky preconditioning, to avoid the matrix inversion involved in our current preconditioning approach.
+
+\vspace{0.5in}
+\section{Acknowledgements}
+
+We'd like to thank Professor Yinyu Ye for his mentorship and guidance throughout the project. 
+
 
 \newpage
 \begin{figure*}[ht!]
@@ -457,19 +485,6 @@ As in the non-structured case, we can resolve this issue by randomly permuting t
 	\label{fig:struct_p_nor}
 \end{figure*}
 
-
-\newpage
-\vspace{0.5in}
-\section{Conclusions and Future Work}
-
-We've evaluated the performance of several different versions of ADMM for linear programming problems. Our experiments show that one can split the problem into blocks without significantly increasing the number of iterations required to find an optimal solution. However, one must be sure to apply preconditioning to the problem or use a randomly permuted update order. Since block splitting allows one to avoid a large matrix inversion, our results suggest that these techniques may reduce the overall runtime of ADMM algorithms. We've also shown that block splitting seems especially well suited to problems with an inherent block structure, which commonly arise in practice.
-
-In our future work, we intend to run similar experiments on more problems to verify that the results are robust. We also intend to test each approach on problems with various sizes. It will be interesting to see how each approach scales as problems grow large. In the future, we plan to compare the runtime (not just the number of iterations) of each algorithm. This will enable us to determine whether avoiding the large matrix inverse actually leads to a speedup. Finally, we intend to experiment with inverse-free preconditioning methods, such as Cholesky preconditioning, to avoid the matrix inversion involved in our current preconditioning approach.
-
-\vspace{0.5in}
-\section{Acknowledgements}
-
-We'd like to thank Professor Yinyu Ye for his mentorship and guidance throughout the project. 
 
 \newpage
 \vspace{0.4in}
