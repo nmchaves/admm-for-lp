@@ -1,6 +1,6 @@
 # Alternating Direction Method of Multipliers (ADMM) for Linear Programming
 
-This project was developed by Junjie (Jason) Zhu and Nico Chaves for Stanford MS&E 310 (Linear Programming). We implemented several novel configurations of the ADMM optimizaton method and ran several experiments. For a complete discussion on background, experiments, and results, please see our report in report/derivations.pdf.
+This project was developed by Junjie (Jason) Zhu and Nico Chaves for Stanford MS&E 310 (Linear Programming). We implemented several novel configurations of the ADMM optimizaton method and ran several experiments. For a complete discussion on background, experiments, and results, please see our [report](report/fall2016/report.pdf).
 
 ## Problem Generation
 

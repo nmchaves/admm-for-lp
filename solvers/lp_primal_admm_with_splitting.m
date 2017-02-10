@@ -1,4 +1,4 @@
-function [ opt_val, x_opt, y_opt, s_opt, err_hist ] = lp_primal_admm_with_splitting( c, A, b, MAX_ITER, TOL, beta, ...
+function [ opt_val, x_hist, y_opt, s_opt, err_hist ] = lp_primal_admm_with_splitting( c, A, b, MAX_ITER, TOL, beta, ...
     precondition, BLOCKS, rnd_permute_x1_update, seed, verbose)
 
 
@@ -94,6 +94,7 @@ end
 
 % history of errors at each iteration
 err_hist = [];
+x_hist = [];
 
 for t=1:MAX_ITER
     
@@ -143,6 +144,7 @@ for t=1:MAX_ITER
     % Compute error and update history
     abs_err = norm(Ax1 - b);
     err_hist = [err_hist abs_err];
+    x_hist = [x_hist cell2mat(x1_blocks)];
     % Early stopping condition
     if abs_err < TOL
         %fprintf('Converged at step %d \n', t)
@@ -154,8 +156,8 @@ for t=1:MAX_ITER
 end
 
 % Return the optimal solution and objective value
-x_opt = cell2mat(x1_blocks);
-opt_val = c' * x_opt;
+%x_opt = cell2mat(x1_blocks);
+opt_val = c' * x_hist(:, end);
 y_opt = y;
 s_opt = cell2mat(s_blocks);
 

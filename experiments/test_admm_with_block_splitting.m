@@ -1,22 +1,18 @@
 clear;clc;close all
-%% generate problem
-m = 20;
-n = 100;
-prob_seed = 0;
-[c, A, b, opt_val] = generate_linprog_problem(m, n , prob_seed);
-
 
 %% parameters
+m = 20;
+n = 100;
+
 MAX_ITER = 1e4; % max # of iterations
 TOL = 1e-4;     % Tolerance
 beta = 0.9;     % parameter (for augmenting lagrangian)
-precondition = true;
 seed = 0; % solver seed
 
-N = 10; % # number of problems to solve
+N = 1; % # number of problems to solve
 corr_tol = 0.01; % Tolerance for correctness
 num_blocks_range = [1, 5, 10, 15, 20]; % # of blocks to use for each splitting experiment
-rnd_permute = true; % Whether or not to randomly permute the block update order
+verb = true;
 
 %% Experiment with various block sizes
 
@@ -29,8 +25,18 @@ for i_prob = 1:N
         num_blocks = num_blocks_range(i_num_blocks);
         for rnd_perm = [true, false]  
             for precond = [true, false]
+                if rnd_perm
+                    disp('Rand perm')
+                else
+                    disp('Sequential')
+                end
+                if precond
+                    disp('Preconditioning')
+                else
+                    disp('Not conditioned')
+                end
                 [ov,~,~,~,eh] = lp_primal_admm_with_splitting(c, A, b, MAX_ITER, TOL, beta, ...
-                                        precond, num_blocks, rnd_perm, seed);
+                                        precond, num_blocks, rnd_perm, seed, verb);
 
                 if abs(ov - opt_val) > corr_tol
                     disp(['Block size: ',num2str(num_blocks)])
@@ -50,7 +56,7 @@ for i_prob = 1:N
     end
 end
 
-save('test_admm_primal_block_split.mat','result','num_blocks_range','rnd_permute')
+save('test_admm_primal_block_split.mat','result','num_blocks_range')
 
 %% Plot the results
 
@@ -58,10 +64,9 @@ figure
 subplot(1,2,1)
 title('without pre-conditioning')
 plot_errorbar_param_conv(result(:,1),num_blocks_range, ...
-                {'Sequential', 'Rand Permute'}, [0,10000])
+                {'Sequential', 'Rand Permute'}, [0,10000], '# of Blocks')
 
 subplot(1,2,2)
 title('with preconditioning')
 plot_errorbar_param_conv(result(:,2),num_blocks_range, ...
-                {'Sequential', 'Rand Permute'}, [0,10000])
-
+                {'Sequential', 'Rand Permute'}, [0,10000], '# of Blocks')
