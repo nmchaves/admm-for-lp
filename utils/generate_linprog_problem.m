@@ -15,6 +15,7 @@ c = rand(n,1);  % so the problem is bounded
 A = randn(m, n);
 x0 = rand(n,1); % non-negative
 b = A * x0;
+
 disp(['Generated feasible and bounded problem with m = ', ...
       num2str(m),', n = ',num2str(n),'.'])
   
