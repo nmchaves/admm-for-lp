@@ -19,7 +19,7 @@ corr_tol = 0.1; % Tolerance for correctness
 legend_obj = {};
 % Variables for plotting
 for b_idx=1:length(beta_range)
-    legend_obj{b_idx} = strcat('b=',num2str(beta_range(b_idx)));
+    legend_obj{b_idx} = strcat('\beta=',num2str(beta_range(b_idx)));
 end
 
 
