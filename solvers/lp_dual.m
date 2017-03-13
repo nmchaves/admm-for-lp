@@ -1,5 +1,5 @@
 function [ opt_val, x_hist, y_opt, s_opt, err_hist ] = lp_dual( c, A, b, MAX_ITER, TOL, beta, ...
-    gamma, precondition, BLOCKS, rnd_permute_y_update, seed, verbose)
+    gamma, preconditioner, BLOCKS, rnd_permute_y_update, seed, verbose)
 % lp_dual  A dual ADMM solver for linear programs. Supports 
 %   block splitting, random and non-random variable updates, 
 %   preconditioning, and interior point approach.
@@ -70,6 +70,7 @@ else  % the block assignment specified
 end
 
 % Apply preconditioning if it was specified
+precondition = preconditioner.type;
 switch precondition
     case 'standard'
         if verbose
@@ -82,7 +83,8 @@ switch precondition
         if verbose
             fprintf('  Using Cholesky pre-conditioning\n')
         end
-        A_ichol = full(ichol(sparse(A * A'))); % ichol expects a sparse matrix
+        A_ichol_left = full(ichol(sparse(A * A'), preconditioner.opts)); % ichol expects a sparse matrix
+        A_ichol = inv(A_ichol_left); %A_ichol_left * A_ichol_left';
         b = A_ichol * b;
         A = A_ichol * A;
     otherwise
