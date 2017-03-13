@@ -19,7 +19,7 @@ corr_tol = 0.1; % Tolerance for correctness
 legend_obj = {};
 % Variables for plotting
 for b_idx=1:length(beta_range)
-    legend_obj{b_idx} = strcat('b=',num2str(beta_range(b_idx)));
+    legend_obj{b_idx} = strcat('\beta=',num2str(beta_range(b_idx)));
 end
 
 
@@ -39,7 +39,7 @@ for i=1:N
     for beta=beta_range
         beta_idx = beta_idx + 1;
         disp(['beta=', num2str(beta)])
-        [ov,~,~,~,eh] = sdp_primal( c, A, b, MAX_ITER, TOL, beta, seed);
+        [ov,X_opt,~,~,eh] = sdp_primal( c, A, b, MAX_ITER, TOL, beta, seed);
         disp(num2str(ov))
         
         % Plot the error history
