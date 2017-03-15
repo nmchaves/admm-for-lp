@@ -28,7 +28,6 @@ end
 
 
 %% Run Primal SDP Experiments for Various Beta Values
-
 figure(1)
 cmap = colormap(hsv);
 num_colors = size(cmap, 1);
@@ -62,8 +61,8 @@ for i=1:N
 end
 
 %% Run Dual SDP Experiments for Various Beta Values
-
 figure(2)
+update_y_first = true;
 cmap = colormap(hsv);
 num_colors = size(cmap, 1);
 color_spacing = floor(num_colors / size(beta_range,2));
@@ -76,7 +75,7 @@ for i=1:N
     for beta_idx = 1:length(beta_range)
         beta = beta_range(beta_idx);
         disp(['beta=', num2str(beta)])
-        [ov,~,~,~,eh, beta_guess] = sdp_dual( c, A, b, MAX_ITER, TOL, beta, seed);
+        [ov,~,~,~,eh, beta_guess] = sdp_dual( c, A, b, update_y_first, MAX_ITER, TOL, beta, seed);
         disp(num2str(ov))
         
         % Plot the error history

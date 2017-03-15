@@ -1,4 +1,4 @@
-function [ opt_val, x_opt, y_opt, s_opt, err_hist, beta ] = sdp_primal( c, A, b, MAX_ITER, TOL, beta, seed)
+function [ opt_val, x_opt, y_opt, s_opt, err_hist, beta ] = sdp_dual( c, A, b, update_y_first, MAX_ITER, TOL, beta, seed)
 % lp_primal  A primal ADMM solver for SDP problems. Supports 
 %   block splitting, random and non-random variable updates, 
 %   preconditioning, and interior point approach.
@@ -24,6 +24,7 @@ s = eye(n, n); %initialize lagrange multiplier. Needs to be positive definite.
 x = eye(n, n); % Initialize x randomly (doesn't need to be positive).
 iter_term_no = MAX_ITER;
 
+% Note: this is a misnomer. ATA in this case is actually AAT
 ATA = zeros(m,m);
 
 for k=1:m
@@ -50,15 +51,30 @@ for i=1:MAX_ITER
     yy = frobBlockMultTranspose(A,y,m,n);
     xx = frobBlockMult(A,x,m);
     ss = frobBlockMult(A,s,m);
-    y = ATAInv*(1/beta*(xx+b)-ss+cc);
+    
+    if update_y_first
+        y = ATAInv*(1/beta*(xx+b)-ss+cc);
+        
+        yy2 = frobBlockMultTranspose(A,y,m,n);
+        srough = 1/beta*x-yy2+c;
 
-    yy2 = frobBlockMultTranspose(A,y,m,n);
-    srough = 1/beta*x-yy2+c;
-    
-    [V,D] = eig(srough);
-    D = diag(bsxfun(@max,zeros(n,1),diag(D)));
-    
-    s = V*D*inv(V);
+        [V,D] = eig(srough);
+        D = diag(bsxfun(@max,zeros(n,1),diag(D)));
+
+        s = V*D*inv(V);
+    else
+        yy2 = frobBlockMultTranspose(A,y,m,n);
+        srough = 1/beta*x-yy2+c;
+
+        [V,D] = eig(srough);
+        D = diag(bsxfun(@max,zeros(n,1),diag(D)));
+
+        s = V*D*inv(V);
+        
+        ss = frobBlockMult(A,s,m);
+        y = ATAInv*(1/beta*(xx+b)-ss+cc);        
+        yy2 = frobBlockMultTranspose(A,y,m,n);     
+    end
     
     x = x-beta*(yy2+s-c);
 
