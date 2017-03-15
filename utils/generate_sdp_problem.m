@@ -15,7 +15,7 @@ x1 = .5*(x0+x0');  %make x symetric
 x2 = x1+abs(min(eig(x1)))+1; %make sure all eigenvalues are positive.
 for k=1:m
     A{k} = randn(n, n);
-    A{k} = .5*(A{k} + A{k}') %WLOG we can make the "A"s symmetric, because x is symmetric.
+    A{k} = .5*(A{k} + A{k}'); %WLOG we can make the "A"s symmetric, because x is symmetric.
     b(k) = sum(sum(A{k} .* x2));
 end
 
