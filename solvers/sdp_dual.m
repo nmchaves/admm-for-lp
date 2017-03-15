@@ -1,4 +1,4 @@
-function [ opt_val, x_opt, y_opt, s_opt, err_hist,iter_term_no ] = sdp_primal( c, A, b, MAX_ITER, TOL, beta, seed)
+function [ opt_val, x_opt, y_opt, s_opt, err_hist, beta ] = sdp_primal( c, A, b, MAX_ITER, TOL, beta, seed)
 % lp_primal  A primal ADMM solver for SDP problems. Supports 
 %   block splitting, random and non-random variable updates, 
 %   preconditioning, and interior point approach.
@@ -30,6 +30,11 @@ for k=1:m
     for l=1:m
         ATA(k,l) = A{k}(:)'*A{l}(:);
     end
+end
+
+% If necessary (i.e. the user passed a negative beta value), compute the beta guess.
+if beta < 0
+    beta = (1.0*trace(ATA)) / n;
 end
 
 ATAInv = inv(ATA);
