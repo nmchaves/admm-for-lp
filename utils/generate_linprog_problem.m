@@ -1,4 +1,4 @@
-function [c, A, b, opt_val] = generate_linprog_problem(m,n,seed)
+function [c, A, b, opt_val, solver_time_sec] = generate_linprog_problem(m,n,seed, solve)
 %
 % minimize t(c) * x
 % subject to: 
@@ -20,9 +20,16 @@ disp(['Generated feasible and bounded problem with m = ', ...
       num2str(m),', n = ',num2str(n),'.'])
   
 %% Compute the Optimal Solution
-disp('Running linprog solver...')
-[opt_x, opt_val] = linprog(c,[],[],A,b,zeros(n,1));
-disp(['linprog optval : ', num2str(opt_val)])
+if solve
+    disp('Running linprog solver...')
+    tic;
+    [opt_x, opt_val] = linprog(c,[],[],A,b,zeros(n,1));
+    solver_time_sec = toc;
+    disp(['linprog optval : ', num2str(opt_val)])
+else
+    opt_val = NaN;
+    solver_time_sec = NaN;
+end
 
 %% (Optional) Compute the Optimal Solution with CVX
 % disp('Running cvx solver...')

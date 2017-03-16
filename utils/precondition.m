@@ -18,10 +18,12 @@ function [ A_pre, b_pre ] = precondition(A, b, type, opts)
             %opts.type = 'nofill';
             %opts.michol = 'off';
             % also try (L*L')^(-1/2)
-            A_ichol_left = ichol(sparse(A * A'), opts);
-            A_ichol = inv(A_ichol_left);
-            b_pre = A_ichol * b;
-            A_pre = A_ichol * A;
+            % Converting from sparse to full seems faster
+            L = full(ichol(sparse(A * A'), opts));
+            
+            % Using \ is faster than inv
+            b_pre = L \ b;
+            A_pre = L \ A;
         otherwise
             fprintf('NOT applying any pre-conditioning\n');
             b_pre = b;
