@@ -1,5 +1,5 @@
 function [ opt_val, x_hist, y_opt, s_opt, err_hist ] = lp_dual( c, A, b, MAX_ITER, TOL, beta, ...
-    gamma, preconditioner, BLOCKS, rnd_permute_y_update, seed, verbose)
+    gamma, BLOCKS, rnd_permute_y_update, seed, verbose)
 % lp_dual  A dual ADMM solver for linear programs. Supports 
 %   block splitting, random and non-random variable updates, 
 %   preconditioning, and interior point approach.
@@ -10,10 +10,6 @@ function [ opt_val, x_hist, y_opt, s_opt, err_hist ] = lp_dual( c, A, b, MAX_ITE
 %   beta (number) The beta parameter used in the augmented Lagrangian
 %   gamma (number) The gamma parameter for updating the interior point 
 %       barrier parameter. If not using interior point, then set gamma<=0
-%   precondition (string) The type of preconditioning to apply if any. 
-%       'none' means not to apply preconditiong, 'standard' means to apply 
-%       the standard inv(A*A') preconditioning, 'ichol' means to apply
-%       incomplete Cholesky preconditioning.
 %   BLOCKS (integer) The number of blocks to use for block splitting
 %   rnd_permute_x1_update (boolean) If true, use random update order for
 %       x1. Otherwise, update x1 sequentially
@@ -67,30 +63,6 @@ else  % the block assignment specified
     if verbose
         disp(['  Splitting into ',num2str(NUM_BLOCKS),' blocks according to block assignment']);
     end
-end
-
-% Apply preconditioning if it was specified
-precondition = preconditioner.type;
-switch precondition
-    case 'standard'
-        if verbose
-            fprintf('  Using standard pre-conditioning\n')
-        end
-        AAT_inv_sqrt = sqrtm(inv(A * A'));
-        b = AAT_inv_sqrt * b;
-        A = AAT_inv_sqrt * A;
-    case 'ichol'
-        if verbose
-            fprintf('  Using Cholesky pre-conditioning\n')
-        end
-        A_ichol_left = full(ichol(sparse(A * A'), preconditioner.opts)); % ichol expects a sparse matrix
-        A_ichol = inv(A_ichol_left); %A_ichol_left * A_ichol_left';
-        b = A_ichol * b;
-        A = A_ichol * A;
-    otherwise
-        if verbose
-            fprintf('  NOT using pre-conditioning\n')
-        end
 end
 
 % random initilization
