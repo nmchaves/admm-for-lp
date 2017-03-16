@@ -2,8 +2,8 @@ clear;clc;close all
 seed = 0;
 
 %% generate problem
-m = 2000;
-n = 4000;
+m = 1000;
+n = 2000;
 prob_seed = 0;
 [c, A, b, opt_val] = generate_linprog_problem(m, n , prob_seed);
 
@@ -12,10 +12,15 @@ MAX_ITER = 1e4; % max # of iterations
 TOL = 1e-3;     % Tolerance
 beta = 0.9;     % parameter (for augmenting lagrangian)
 gamma = 0.1;
-preconditioners = {'none', 'standard', 'ichol'};
-precond = struct('type', {}, 'opts', {});
-default_ichol_opts = struct('type', 'nofill');
-precond(1).opts = default_ichol_opts;
+preconditioners = [
+    Preconditioner('none', struct()), ...
+    Preconditioner('standard', struct()), ...
+    Preconditioner('ichol', struct('type', 'nofill')), ...
+    Preconditioner('ichol', struct('type', 'ict', 'droptol', 1e-6)), ...
+    Preconditioner('ichol', struct('type', 'ict', 'droptol', 1e-3)), ...
+    Preconditioner('ichol', struct('type', 'ict', 'droptol', 0.01)), ...
+    Preconditioner('ichol', struct('type', 'ict', 'droptol', 0.1))
+];
 
 N = 1; % # number of problems to solve
 corr_tol = 0.01; % Tolerance for correctness
@@ -40,20 +45,20 @@ figure(1)
 
 for i_prob = 1:N
     prob_seed = i_prob-1;
-    disp(' ')
     disp(['Problem ',num2str(i_prob)])
     [c, A, b, opt_val] = generate_linprog_problem(m,n,prob_seed);
-    p_idx = 0; % index of current preconditioner type
-    for precond_type = preconditioners
-        p_idx = p_idx + 1;
+    
+    for p_idx = 1:length(preconditioners)
+        precond = preconditioners(p_idx);
         subplot(1, length(preconditioners), p_idx)
-        precond(1).type = precond_type{1};
-       
+
+        [A_pre, b_pre] = precond.apply(A, b);
+
         b_idx = 0; % index of current block number
         for num_blocks = num_blocks_range     
             b_idx = b_idx+1;
-            [ov,~,~,~,eh] = lp_primal(c, A, b, MAX_ITER, TOL, beta, ...
-                gamma, precond, num_blocks, rnd_perm, seed, verb);
+            [ov,~,~,~,eh] = lp_primal(c, A_pre, b_pre, MAX_ITER, TOL, ...
+                    beta, gamma, num_blocks, rnd_perm, seed, verb);
             
             if abs(ov - opt_val) > corr_tol
                 warning('Incorrect Solution!')
@@ -67,12 +72,13 @@ for i_prob = 1:N
      
             % Plot the error history
             semilogy(1:length(eh),eh, colors{b_idx})
+            xlim([0, 1e4])
+            ylim([1e-3, 1e2])
             hold on
-            
             
         end
         legend(legend_obj)
-        title(preconditioners{p_idx})
+        title(precond.toTitle())
     end
 end
 
@@ -82,20 +88,20 @@ figure(2)
 
 for i_prob = 1:N
     prob_seed = i_prob-1;
-    disp(' ')
     disp(['Problem ',num2str(i_prob)])
     [c, A, b, opt_val] = generate_linprog_problem(m,n,prob_seed);
-    p_idx = 0; % index of current preconditioner type
-    for precond_type = preconditioners
-        p_idx = p_idx + 1;
-        subplot(1, length(preconditioners), p_idx)  
-        precond(1).type = precond_type{1};
-        
+    
+    for p_idx = 1:length(preconditioners)
+        precond = preconditioners(p_idx);
+        subplot(1, length(preconditioners), p_idx)
+
+        [A_pre, b_pre] = precond.apply(A, b);
+
         b_idx = 0; % index of current block number
         for num_blocks = num_blocks_range     
             b_idx = b_idx+1;
-            [ov,~,~,~,eh] = lp_dual(c, A, b, MAX_ITER, TOL, beta, ...
-                gamma, precond, num_blocks, rnd_perm, seed, verb);
+            [ov,~,~,~,eh] = lp_dual(c, A_pre, b_pre, MAX_ITER, TOL, ...
+                    beta, gamma, num_blocks, rnd_perm, seed, verb);
             
             if abs(ov - opt_val) > corr_tol
                 warning('Incorrect Solution!')
@@ -109,105 +115,12 @@ for i_prob = 1:N
      
             % Plot the error history
             semilogy(1:length(eh),eh, colors{b_idx})
+            xlim([0, 7e2])
+            ylim([1e-3, 1e2])
             hold on
             
-            
         end
-        title(preconditioners{p_idx})
+        legend(legend_obj)
+        title(precond.toTitle())
     end
 end
-
-
-%% Experiments Focusing Only on Effect of Block Size
-precond(1).type = 'ichol';
-
-%% Primal IP ADMM with 1 block (no splitting)
-tic
-NUM_BLOCKS = 1;
-rnd_permute = true; % This would have no effect anyways
-[ov1,~,~,~,eh1] = lp_primal(c, A, b, MAX_ITER, TOL, beta, gamma, ...
-                                    precond, NUM_BLOCKS, rnd_permute, seed, verb);
-toc
-%% Primal IP ADMM with 5 blocks
-tic
-NUM_BLOCKS = 5;
-rnd_permute = true;
-[ov2,~,~,~,eh2] = lp_primal(c, A, b, MAX_ITER, TOL, beta, gamma,...
-                                    precond, NUM_BLOCKS, rnd_permute, seed, verb);
-toc                             
-%% Primal IP ADMM with 10 blocks
-tic
-NUM_BLOCKS = 10;
-rnd_permute = true;
-[ov3,~,~,~,eh3] = lp_primal(c, A, b, MAX_ITER, TOL, beta,gamma, ...
-                                    precond, NUM_BLOCKS, rnd_permute, seed, verb);
-toc
-
-%% Plot                        
-figure(1)
-semilogy(1:length(eh1),eh1, 'r')
-hold on
-semilogy(1:length(eh2),eh2, 'g')
-semilogy(1:length(eh3),eh3, 'b')
-xlabel('Iteration')
-ylabel('Abs Error: ||A*x1-b||')
-title('Primal IP ADMM')
-
-
-%% Dual IP ADMM with 1 block (no splitting)
-tic
-NUM_BLOCKS = 1;
-rnd_permute = true; % This would have no effect anyways
-[ov1,~,~,~,eh1] = lp_dual(c, A, b, MAX_ITER, TOL, beta, gamma, ...
-                                    precond, NUM_BLOCKS, rnd_permute, seed, verb);
-toc
-%% Dual IP ADMM with 5 blocks
-tic
-NUM_BLOCKS = 5;
-rnd_permute = true;
-[ov2,~,~,~,eh2] = lp_dual(c, A, b, MAX_ITER, TOL, beta, gamma,...
-                                    precond, NUM_BLOCKS, rnd_permute, seed, verb);
-toc                             
-%% Dual IP ADMM with 10 blocks
-tic
-NUM_BLOCKS = 10;
-rnd_permute = true;
-[ov3,~,~,~,eh3] = lp_dual(c, A, b, MAX_ITER, TOL, beta,gamma, ...
-                                    precond, NUM_BLOCKS, rnd_permute, seed, verb);
-toc
-
-%% Plot                        
-figure(2)
-semilogy(1:length(eh1),eh1, 'r')
-hold on
-semilogy(1:length(eh2),eh2, 'g')
-semilogy(1:length(eh3),eh3, 'b')
-xlabel('Iteration')
-ylabel('Abs Error: ||A*x1-b||')
-title('Dual IP ADMM')
-
-
-%% Experiments Focusing Only Different Tolerances for Incomplete Cholesky
-preconditioner = struct('type', {}, 'opts', {});
-preconditioner(1).type = 'ichol';
-preconditioner(1).opts = default_ichol_opts;
-ichol_types = ['nofill', 'ict'];
-ntols = 4;
-droptols = logspace(-3,0,ntols);
-
-opts = struct();
-opts.type = 'nofill';
-opts.michol = 'off';
-opts.droptol = 1e-1;
-preconditiner.opts = opts;
-
-
-%% Primal IP ADMM
-profile on
-tic
-NUM_BLOCKS = 5;
-rnd_permute = true; % This would have no effect anyways
-[ov1,~,~,~,eh1] = lp_primal(c, A, b, MAX_ITER, TOL, beta, gamma, ...
-                                    preconditioner, NUM_BLOCKS, rnd_permute, seed, verb);
-toc
-profile viewer
