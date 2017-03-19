@@ -115,7 +115,7 @@ We terminate when the solution is primal feasible, i.e., $A \mathbf{x}_1^{k+1}  
 \subsection*{Dual Update}
 We reformulate \eqref{eq:LD} as a minimization problem:
 \begin{align}
-\text{minimize}_{\mathbf{y}, \mathbf{s}} &\quad -\mathbf{b}^T\mathbf{y}  \tag{LDR}\label{LDR} \\
+\text{minimize}_{\mathbf{y}, \mathbf{s}} &\quad -\mathbf{b}^T\mathbf{y}  \tag{LDR}\label{eq:LDR} \\
 \text{subject to } &\quad  A^T \mathbf{y}  + \mathbf{s} = \mathbf{c},  \nonumber \\
 &\quad \mathbf{s} \geq \mathbf{0} \nonumber
 \end{align}
@@ -161,7 +161,7 @@ x_{2,j} = \frac{1}{2\beta}\left(\beta x_{1,j} - s_j  + \sqrt{\beta^2 x_{1,j}^2 -
 The update equations for $\mathbf{y}$ and $\mathbf{s}$ remain the same as in \eqref{eq:y_primal_update} and \eqref{eq:s_primal_update}. At the end of each iteration, we update $\mu^{k+1} = \gamma \mu^k$ for some constant $\gamma<1$, and the termination condition remains the same as the non-interior-point method. 
 
 \subsection*{Interior Point Dual LP Updates}
-We modify \eqref{LDR} using the log barrier function:
+We modify \eqref{eq:LDR} using the log barrier function:
 \begin{align}
 \min_{\mathbf{y}, \mathbf{s}} &\quad -\mathbf{b}^T\mathbf{y} - \mu \sum_j \ln (s_j)  \tag{LDRB}\label{LDRB} \\
 \text{subject to } &\quad  A^T \mathbf{y}  + \mathbf{s} = \mathbf{c}  \nonumber
@@ -185,7 +185,7 @@ The update equation for $\mathbf{x}$ remains the same as in \eqref{eq:x_dual_upd
 
 As shown in the previous section, certain ADMM update steps require computation of a potentially large matrix inverse. This computation may become the bottleneck for sufficiently large problems. By splitting the decision variables into blocks and updating the blocks sequentially, one can reduce the runtime by computing multiple small matrix inverses instead of a single large matrix inverse.
 
-However, when the decision variables are separable, it may not be necessary to apply block updates on them. At the end of each iteration, these separable variables would take identical values no matter how they are grouped. Thus, we only need to consider the cases where we split $\mathbf{x_1}$ in the primal problems (i.e.,  \eqref{eq:LPR} and \eqref{LPRB}), or to split $\mathbf{y}$ in the dual problems (i.e.,  \eqref{LDR} and \eqref{LDRB}).
+However, when the decision variables are separable, it may not be necessary to apply block updates on them. At the end of each iteration, these separable variables would take identical values no matter how they are grouped. Thus, we only need to consider the cases where we split $\mathbf{x_1}$ in the primal problems (i.e.,  \eqref{eq:LPR} and \eqref{LPRB}), or to split $\mathbf{y}$ in the dual problems (i.e.,  \eqref{eq:LDR} and \eqref{LDRB}).
 
 \subsection*{Primal ADMM with Block Splitting}
 
@@ -329,7 +329,7 @@ These results suggest that one should prefer to use the maximum number of blocks
 
 \subsection*{Preconditioning with no Block-Splitting}
 
-We studied the effect of preconditioning on the convergence rate of the basic primal and dual ADMM algorithms applied \eqref{eq:LPR} and \eqref{LDR}. First, we generated 10 random problems of size $50 \times 300$ and recorded the number of iterations required to converge as a function of $\beta$.The results  are shown in Figure \ref{fig:base_p_d}. We observe that all of the ADMM approaches are relatively insensitive to $\beta$. For the rest of our experiments, we fixed $\beta=0.9$. Choosing a different value of $\beta$ should not have much effect on the rest of our results. 
+We studied the effect of preconditioning on the convergence rate of the basic primal and dual ADMM algorithms applied to \eqref{eq:LPR} and \eqref{eq:LDR}. First, we generated 10 random problems of size $50 \times 300$ and recorded the number of iterations required to converge as a function of $\beta$.The results  are shown in Figure \ref{fig:base_p_d}. We observe that all of the ADMM approaches are relatively insensitive to $\beta$. For the rest of our experiments, we fixed $\beta=0.9$. Choosing a different value of $\beta$ should not have much effect on the rest of our results. 
 
 Next, we did TODO: incomplete Cholesky w/block splitting....
 
