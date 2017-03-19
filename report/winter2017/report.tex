@@ -87,7 +87,7 @@ In this section, we derive the ADMM update procedures for solving \eqref{eq:LP} 
 \subsection*{Primal Update}
 We re-formulate the primal LP problem as:
 \begin{align}
-\text{minimize}_{ \mathbf{x}_{1}, \mathbf{x}_{2}} &\quad \mathbf{c}^T\mathbf{x}_1 \tag{LPR}\label{LPR} \\
+\text{minimize}_{ \mathbf{x}_{1}, \mathbf{x}_{2}} &\quad \mathbf{c}^T\mathbf{x}_1 \tag{LPR}\label{eq:LPR} \\
 \text{subject to  \ \  } &\quad  A \mathbf{x}_{1} = \mathbf{b},  \nonumber \\
 &\quad \mathbf{x}_{1}  - \mathbf{x}_{2} = \mathbf{0},  \nonumber \\
 &\quad \mathbf{x}_{2} \geq \mathbf{0} \nonumber 
@@ -140,7 +140,7 @@ We terminate and declare optimality when $A \mathbf{x}^{k+1} + \mathbf{b} \appro
 \section{Interior-Point ADMM for LP}
 
 \subsection*{Interior Point Primal LP Updates}
-Here we modify the formulation in \eqref{LPR} using the log barrier function:
+Here we modify the formulation in \eqref{eq:LPR} using the log barrier function:
 \begin{align}
 \min_{ \mathbf{x}_{1}, \mathbf{x}_{2}} &\quad \mathbf{c}^T\mathbf{x}_1 - \mu \sum_j \ln( {x}_{2,j} )\tag{LPRB}\label{LPRB} \\
 \text{subject to  \ \  } &\quad  A \mathbf{x}_{1} = \mathbf{b},  \nonumber \\
@@ -183,9 +183,9 @@ The update equation for $\mathbf{x}$ remains the same as in \eqref{eq:x_dual_upd
 %%%%%%%%%%
 \section{Multi-Block ADMM for LP}
 
-As shown in the previous section, certain ADMM update steps require computation of a potentially large matrix inverse. Tthis computation may become the bottleneck for sufficiently large problems. By splitting the decision variables into blocks and updating the blocks sequentially, one can reduce the runtime by computing multiple small matrix inverses instead of a single large matrix inverse.
+As shown in the previous section, certain ADMM update steps require computation of a potentially large matrix inverse. This computation may become the bottleneck for sufficiently large problems. By splitting the decision variables into blocks and updating the blocks sequentially, one can reduce the runtime by computing multiple small matrix inverses instead of a single large matrix inverse.
 
-However, when the decision variables are separable, it may not be necessary to apply block updates on them. At the end of each iteration, these separable variables would take identical values no matter how they are grouped. Thus, we only need to consider the cases where we split $\mathbf{x_1}$ in the primal problems (i.e.,  \eqref{LPR} and \eqref{LPRB}), or to split $\mathbf{y}$ in the dual problems (i.e.,  \eqref{LDR} and \eqref{LDRB}).
+However, when the decision variables are separable, it may not be necessary to apply block updates on them. At the end of each iteration, these separable variables would take identical values no matter how they are grouped. Thus, we only need to consider the cases where we split $\mathbf{x_1}$ in the primal problems (i.e.,  \eqref{eq:LPR} and \eqref{LPRB}), or to split $\mathbf{y}$ in the dual problems (i.e.,  \eqref{LDR} and \eqref{LDRB}).
 
 \subsection*{Primal ADMM with Block Splitting}
 
@@ -289,79 +289,99 @@ y=\left(\mathcal{A}\mathcal{A}^{T}\right)^{-1}\left(\frac{1}{\beta}\left(\mathca
 S=\max\left\{ 0,\frac{1}{\beta}X+C-\mathcal{A}^{T}y\right\} 
 \]
 Here, $\max\left\{ 0,M\right\} $ is defined in the SDP primal section above. \\
-The $X$ update is similar to the LP case: $X^{k+1}=X^{k}-\beta\left(\mathcal{A}^{T}\mathbf{y}^{k+1}+S^{k+1}-C\right)$
+The $X$ update is similar to the LP case: $X^{k+1}=X^{k}-\beta\left(\mathcal{A}^{T}\mathbf{y}^{k+1}+S^{k+1}-C\right)$.
 
 %%%%%%%%%%%%%%%%%%%%%
 \section{Experiments and Results}
 
-We evaluated the performance of the different ADMM approaches by randomly simulating problems and recording the number of iterations needed to converge. Each set of experiments is described in more detail below.
+We evaluated the performance of the different ADMM approaches by generating random problems and recording the number of iterations needed to converge.
 
-\subsection*{Preconditioning with no Block-Splitting}
-
-First, we studied how preconditioning affects the convergence rate of the basic primal and dual ADMM algorithms in \eqref{LPR} and \eqref{LDR}. For simplicity, we did not apply block splitting. We evaluated the two algorithms over 10 random problems of size $50 \times 300$. 
-
-We evaluated how sensitive these ADMM LP algorithms are to the $\beta$ parameter in the augmented Lagrangian. For each algorithm, we recorded the number of iterations required to converge as a function of $\beta$. The results  are shown in Figure \ref{fig:base_p_d}. We observe that all of the ADMM approaches are relatively insensitive to $\beta$. For the rest of our experiments, we fixed $\beta=0.9$. Choosing a different value of $\beta$ should not have much effect on the rest of our results. 
-
-Additionally, we notice that the basic primal ADMM implementation converges in fewer iterations than the basic dual ADMM, but when preconditioning is applied (on the same problems), the dual converges in fewer iterations than the primal.
-\newline
-\newline
-\newline
-\begin{figure*}[ht]
-	\centering
-	\includegraphics[width=0.8\textwidth]{../figures/primal_dual_preconditioning.png}
-	\caption{Results on 10 random LP problem of size $50 \times 300$. }
-	\label{fig:base_p_d}
-\end{figure*}
 \newpage
 \subsection*{Baseline Block-splitting (No Random Permutation, No Preconditioning)}
 To establish a baseline, we evaluated the ADMM solvers using sequential updating (i.e. we did not randomly permute the block update order) and without using preconditioning. The results of this experiment are shown in Figure \ref{fig:nop_nor}. In the figure, $B$ represents the number of blocks ($B=1$ indicates that no splitting was performed). Note that when $B>2$, the problem does not necessarily converge. As we will see in the following experiments, we can improve performance by introducing random permutations or preconditioning.
-\newline
-\newline
-\newline
-\newline
 
 \begin{figure*}[h]
 	\includegraphics[width=\textwidth]{../figures/noprecond_norndperm.png}
 	\caption{Results on a random LP problem of size $50 \times 300$. No preconditioning and no random permutation.}
 	\label{fig:nop_nor}
 \end{figure*}
-\newpage
+
 \subsection*{Block-splitting with Random Permutation (No Preconditioning)}
 
 In this set of experiments, we randomly permuted the update order of the block variables at each iteration. The results are shown in Figure \ref{fig:nop_r}. When using random permutation, the primal now converges for all block sizes. Note that splitting the primal into more blocks requires more iterations. However, performing block splitting may still result in lower overall runtime because of the faster inverse computations. 
-\newline
-\newline
-\newline
-\newline
+
 \begin{figure*}[h]
 	\includegraphics[width=\textwidth]{../figures/noprecond_rndperm.png}
 	\caption{Results on a random LP problem of size $50 \times 300$. Only random permutation and no preconditioning.}
 	\label{fig:nop_r}
 \end{figure*}
-\newpage
+
 \subsection*{Block-splitting with Preconditioning (No Random Permutation)}
-In this set of experiments, we applied preconditioning to each problem and used sequential block updates (no random permutation). The results are shown in Figure \ref{fig:p_nor}. Note that the number of blocks has no effect on the number of iterations required for either dual algorithm. This verifies our claim at the end of Section 3 that preconditioning applied to the dual causes $\mathbf{y}$ to be separable. Interestingly, the number of blocks has very little effect on the number of iterations for the primal. 
+In this set of experiments, we applied preconditioning to each problem and used sequential block updates (no random permutation). The results are shown in Figure \ref{fig:p_nor}. Note that the number of blocks has no effect on the number of iterations required for either dual algorithm. We explain this behavior in the appendix. 
 
 These results suggest that one should prefer to use the maximum number of blocks possible ($n$ for the primal and $m$ for the dual) when using preconditioning. In this case, the matrices that need to be inverted in the decision variable updates become scalars, so the updates can be computed rapidly.
-\newline
-\newline
-\newline
-\newline
+
 \begin{figure*}[h]
 	\includegraphics[width=\textwidth]{../figures/precond_norndperm.png}
 	\caption{Results on a random LP problem of size $50 \times 300$. Only preconditioning and no random permutation.}
 	\label{fig:p_nor}
 \end{figure*}
 
-\newpage
+\subsection*{Preconditioning with no Block-Splitting}
+
+We studied the effect of preconditioning on the convergence rate of the basic primal and dual ADMM algorithms applied \eqref{eq:LPR} and \eqref{LDR}. First, we generated 10 random problems of size $50 \times 300$ and recorded the number of iterations required to converge as a function of $\beta$.The results  are shown in Figure \ref{fig:base_p_d}. We observe that all of the ADMM approaches are relatively insensitive to $\beta$. For the rest of our experiments, we fixed $\beta=0.9$. Choosing a different value of $\beta$ should not have much effect on the rest of our results. 
+
+Next, we did TODO: incomplete Cholesky w/block splitting....
+
+\begin{figure*}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{../figures/primal_dual_preconditioning.png}
+	\caption{Results on 10 random LP problem of size $50 \times 300$ using standard preconditioning. }
+	\label{fig:base_p_d}
+\end{figure*}
+TODO: incomplete Cholesky figure here...
+
+\subsection*{Cholesky and Incomplete Cholesky Preconditioning}
+
+\subsection*{SDP}
+
+
+The figures below (TODO: fig refs!!) show the behavior of the SDP primal and dual solvers on a problem with $m=30$, $n=10$, and various values of $\beta$.
+
+\begin{figure*}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{/Users/nicochaves/Documents/Stanford/MSE310_Project/admm-for-lp/experiments/sdp/results/sdp_primal_results_m_30_n_10}
+	\caption{SDP Primal, $m=30, n=10$}
+	\label{fig:sdp_primal}
+\end{figure*}
+
+\begin{figure*}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{/Users/nicochaves/Documents/Stanford/MSE310_Project/admm-for-lp/experiments/sdp/results/sdp_dual_results_m_30_n_10}
+	\caption{SDP Dual, ,$m=30, n=10$}
+	\label{fig:sdp_dual}
+\end{figure*}
+
+Note that the dashed pink lines correspond to $\beta$ values selected
+using the following rules:
+\begin{eqnarray*}
+\text{Primal:} & \beta=\text{trace}(A^{T}A)/n^{2}\\
+\text{Dual:} & \beta=\text{trace}(AA^{T})/n
+\end{eqnarray*}
+
+We observe that the solvers are somewhat sensitive to $\beta$, especially
+for very small and very large values. 
+
+\textbf{Note:} For the dual SDP, we tried updating $y$ and $S$ in
+different orders (i.e. $y$ first then $S$ and vice versa), but the
+differences with the above figure were negligible. This suggests that
+the $y$ and $S$ update order is not necessarily important.
 
 
 \vspace{0.1in}
-\section{Conclusions and Future Work}
+\section{Conclusions}
 
-We evaluated the performance of several different versions of ADMM for linear programming problems. Our experiments show that one can split the problem into blocks without significantly increasing the number of iterations required to find an optimal solution. However, one must be sure to apply preconditioning to the problem or use a randomly permuted update order. Since block splitting allows one to avoid a large matrix inversion, our results suggest that these techniques may reduce the overall runtime of ADMM algorithms. We also found that block splitting seems especially well suited to problems with an inherent block structure, which commonly arise in practice.
-
-In our future work, we intend to run similar experiments on more problems to verify that the results are robust. We also intend to test each approach on problems with various sizes. It will be interesting to see how each approach scales as problems grow large. We plan to compare the runtime (not just the number of iterations) of each algorithm, accounting for the time to take large matrix inversions. This will enable us to determine whether avoiding the large matrix inverse actually leads to a speedup. Finally, we intend to experiment with inverse-free preconditioning methods, such as Cholesky preconditioning, to avoid the matrix inversion involved in our current preconditioning approach. Indeed, we have shown cases where LP problems cannot be solved correctly without preconditioning or random-permutation on the block updates, and the results we present here on preconditioning make inverse-free preconditioning methods promising for multi-block ADMM.
+We evaluated the performance of several different versions of ADMM for linear and semidefinite programs. Our experiments show that one can split linear programs into blocks without significantly increasing the number of iterations required to find an optimal solution. However, one must be sure to apply preconditioning to the problem and/or use a randomly permuted update order. Since block splitting allows one to avoid a large matrix inversion, our results suggest that these techniques may reduce the overall runtime of ADMM algorithms. 
 
 \section{Acknowledgements}
 
