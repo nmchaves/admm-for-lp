@@ -82,7 +82,7 @@ For \eqref{eq:LP} and \eqref{eq:LD}, we also experimented with block splitting, 
 
 %%%%%%%%%%
 \section{Basic ADMM for Linear Programming}
-In this section, we derive the ADMM update procedures for solving \eqref{eq:LP} and \eqref{eq:LD}.
+In this section, we describe the ADMM update procedures for solving \eqref{eq:LP} and \eqref{eq:LD}.
 
 \subsection*{Primal Update}
 We re-formulate the primal LP problem as:
@@ -123,7 +123,7 @@ The dual's augmented Lagrangian function is then:
 \[
 L^{d}(\mathbf{y},\mathbf{s},\mathbf{x})=-\mathbf{b}^{T}\mathbf{y}-\mathbf{x}^{T}\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right)+\frac{\beta}{2}\left\Vert A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right\Vert ^{2}.
 \]
-The decision variable updates are given by:
+The decision variable updates are given by (see Appendix for derivation):
 \begin{align}\label{eq:y_dual_update}
 \mathbf{y}^{k+1} = \left(AA^{T}\right)^{-1}\left(\frac{1}{\beta}\left(A\mathbf{x}^{k}+\mathbf{b}\right)-A\mathbf{s}^{k}+A\mathbf{c}\right),
 \end{align}
@@ -183,9 +183,9 @@ The update equation for $\mathbf{x}$ remains the same as in \eqref{eq:x_dual_upd
 %%%%%%%%%%
 \section{Multi-Block ADMM for LP}
 
-As shown in the previous section, certain ADMM update steps require computation of a potentially large matrix inverse. This computation may become the bottleneck for sufficiently large problems. By splitting the decision variables into blocks and updating the blocks sequentially, one can reduce the runtime by computing multiple small matrix inverses instead of a single large matrix inverse.
+As shown in the previous section, certain ADMM update steps require computation of a potentially large matrix inverse. This computation may become the bottleneck for sufficiently large problems. Splitting the decision variables into blocks may reduce the runtime, because one would need to compute multiple small matrix inverses instead of a single large matrix inverse.
 
-However, when the decision variables are separable, it may not be necessary to apply block updates on them. At the end of each iteration, these separable variables would take identical values no matter how they are grouped. Thus, we only need to consider the cases where we split $\mathbf{x_1}$ in the primal problems (i.e.,  \eqref{eq:LPR} and \eqref{LPRB}), or to split $\mathbf{y}$ in the dual problems (i.e.,  \eqref{eq:LDR} and \eqref{LDRB}).
+However, when the decision variables are separable, it may not be necessary to apply block updates on them. At the end of each iteration, these separable variables would take identical values no matter how they are grouped. Thus, we only need to consider the cases where we split $\mathbf{x_1}$ in the primal problems (i.e.,  \eqref{eq:LPR} and \eqref{LPRB}) or $\mathbf{y}$ in the dual problems (i.e.,  \eqref{eq:LDR} and \eqref{LDRB}).
 
 \subsection*{Primal ADMM with Block Splitting}
 
@@ -216,17 +216,34 @@ where $A_{i}$ refers to the $i^{\text{th}}$ block of columns of $A$. See the App
 
 \subsection*{Dual ADMM with Block Splitting}
 
-TODO: need to show how the blocks get split!!
+Consider splitting the problem into $B$ blocks of equal size as follows:
+\[
+\mathbf{y}=\begin{bmatrix}\mathbf{y}_{1}\\
+\mathbf{y}_{2}\\
+\vdots \\
+\mathbf{y}_{B}
+\end{bmatrix},
+\ \
+A^{T}=\begin{bmatrix}A_{1}^{T} & \dots & A_{B}^{T}\end{bmatrix},
+\ \ 
+\mathbf{b}=\begin{bmatrix}\mathbf{b}_{1}\\
+\mathbf{b}_{2} \\
+\vdots \\
+\mathbf{b}_{B}
+\end{bmatrix}
+\]
+
+
 
 Let $U$ denote the set of blocks which have already been updated at the current iteration. To update block $i$ of $\mathbf{y}$:
 \[
-\mathbf{y}_{i}^{k+1}=\left(A_{i}A_{i}^{T}\right)^{-1}\left(\frac{1}{\beta}\left(A_{i}\mathbf{x}+\mathbf{b}_{i}\right)-A_{i}\left(\mathbf{s}-\mathbf{c}\right)-\sum_{j\neq i,j\in U}A_{i}A_{j}^{T}\mathbf{y}_{j}^{k+1}-\sum_{j\neq i,j\notin U}A_{i}A_{j}^{T}\mathbf{y}_{j}^{k}\right)
+\mathbf{y}_{i}^{k+1}=\left(A_{i}A_{i}^{T}\right)^{-1}\left(\frac{1}{\beta}\left(A_{i}\mathbf{x}+\mathbf{b}_{i}\right)-A_{i}\left(\mathbf{s}^{k}-\mathbf{c}\right)-\sum_{j\neq i,j\in U}A_{i}A_{j}^{T}\mathbf{y}_{j}^{k+1}-\sum_{j\neq i,j\notin U}A_{i}A_{j}^{T}\mathbf{y}_{j}^{k}\right)
 \]
 See the Appendix for a derivation.
 
 %%%%%%%%%%
 \section{Preconditioning}
-In this report, we demonstrate that preconditioning can help ADMM solve linear programs faster. After preconditioning the system, we solve the problem using the modified constraints: 
+In this report, we demonstrate that preconditioning can help ADMM solve linear programs in fewer iterations. After preconditioning the system, we solve the problem using the modified constraints: 
 \begin{equation}
 A' x = \mathbf{b}'
 \end{equation}
@@ -239,14 +256,13 @@ A' = (AA^T )^{-1/2}A , \quad \quad \mathbf{b}' =(AA^T )^{-1/2}\mathbf{b}
 and then substitutes $A'$ and $\mathbf{b}'$ for $A$ and $\mathbf{b}$ in the original problems \eqref{eq:LP} and \eqref{eq:LD}. Clearly, this re-formulation does not change the feasible regions for  \eqref{eq:LP} or \eqref{eq:LD}. 
 
 \subsection*{Cholesky Preconditioning}
-
-We  can also precondition our system using a Cholesky factorization:
+We  can also precondition the system using a Cholesky factorization:
 \[
 AA^{T}=LL^{T}, \quad \quad A'=L^{-1}A, \quad \quad \mathbf{b}'=L^{-1}\mathbf{b}
 \]
 where $L$ is a lower triangular matrix. To perform the preconditioning more quickly, we can use an incomplete Cholesky factorization:
 \[
-A\approx \hat{L}\hat{L}^{T}, \quad \quad A'=\hat{L}^{-1}A, \quad \quad \mathbf{b}'=\hat{L}^{-1}\mathbf{b}
+AA^{T} \approx \hat{L}\hat{L}^{T}, \quad \quad A'=\hat{L}^{-1}A, \quad \quad \mathbf{b}'=\hat{L}^{-1}\mathbf{b}
 \]
 
 %%%%%%%%%%%%%%%%%%%%%
@@ -254,7 +270,7 @@ A\approx \hat{L}\hat{L}^{T}, \quad \quad A'=\hat{L}^{-1}A, \quad \quad \mathbf{b
 \subsection*{ADMM for SDP Primal}
 Similar to the LP case, we divide $X$ into $X_{1}$ and $X_{2}$
 and solve the reformulated problem:
-\begin{eqnarray*}
+\begin{eqnarray*} 
 \min_{X_{1},X_{2}} & C\bullet X_{1}\\
 \text{s.t.} & \mathcal{A}X_{1}=b\\
  & X_{1}=X_{2}\\
@@ -298,7 +314,7 @@ We evaluated the performance of the different ADMM approaches by generating rand
 
 \newpage
 \subsection*{Baseline Block-splitting (No Random Permutation, No Preconditioning)}
-To establish a baseline, we evaluated the ADMM solvers using sequential updating (i.e. we did not randomly permute the block update order) and without using preconditioning. The results of this experiment are shown in Figure \ref{fig:nop_nor}. In the figure, $B$ represents the number of blocks ($B=1$ indicates that no splitting was performed). Note that when $B>2$, the problem does not necessarily converge. As we will see in the following experiments, we can improve performance by introducing random permutations or preconditioning.
+To establish a baseline, we evaluated the ADMM solvers using sequential updating (i.e. we did not randomly permute the block update order) and without using preconditioning. The results of this experiment are shown in Figure \ref{fig:nop_nor}. $B$ represents the number of blocks ($B=1$ indicates that no splitting was performed). Note that when $B>2$, the problem does not necessarily converge. As we will see in the following experiments, we can improve performance by introducing random permutations or preconditioning.
 
 \begin{figure*}[h]
 	\includegraphics[width=\textwidth]{../figures/noprecond_norndperm.png}
@@ -316,8 +332,8 @@ In this set of experiments, we randomly permuted the update order of the block v
 	\label{fig:nop_r}
 \end{figure*}
 
-\subsection*{Block-splitting with Preconditioning (No Random Permutation)}
-In this set of experiments, we applied preconditioning to each problem and used sequential block updates (no random permutation). The results are shown in Figure \ref{fig:p_nor}. Note that the number of blocks has no effect on the number of iterations required for either dual algorithm. We explain this behavior in the appendix. 
+\subsection*{Block-splitting with Standard Preconditioning (No Random Permutation)}
+In this set of experiments, we applied standard preconditioning to each problem and used sequential block updates (no random permutation). The results are shown in Figure \ref{fig:p_nor}. Note that the number of blocks has no effect on the number of iterations required for either dual algorithm. We explain this behavior in the appendix. 
 
 These results suggest that one should prefer to use the maximum number of blocks possible ($n$ for the primal and $m$ for the dual) when using preconditioning. In this case, the matrices that need to be inverted in the decision variable updates become scalars, so the updates can be computed rapidly.
 
@@ -329,9 +345,7 @@ These results suggest that one should prefer to use the maximum number of blocks
 
 \subsection*{Preconditioning with no Block-Splitting}
 
-We studied the effect of preconditioning on the convergence rate of the basic primal and dual ADMM algorithms applied to \eqref{eq:LPR} and \eqref{eq:LDR}. First, we generated 10 random problems of size $50 \times 300$ and recorded the number of iterations required to converge as a function of $\beta$.The results  are shown in Figure \ref{fig:base_p_d}. We observe that all of the ADMM approaches are relatively insensitive to $\beta$. For the rest of our experiments, we fixed $\beta=0.9$. Choosing a different value of $\beta$ should not have much effect on the rest of our results. 
-
-Next, we did TODO: incomplete Cholesky w/block splitting....
+We also studied the effect of preconditioning (without block-splitting) on the convergence rate of the basic primal and dual ADMM algorithms applied to \eqref{eq:LPR} and \eqref{eq:LDR}. We generated 10 random problems of size $50 \times 300$ and recorded the number of iterations required to converge as a function of $\beta$. The results  are shown in Figure \ref{fig:base_p_d}. We observe that all of the ADMM approaches are relatively insensitive to $\beta$.
 
 \begin{figure*}[ht]
 	\centering
@@ -339,14 +353,40 @@ Next, we did TODO: incomplete Cholesky w/block splitting....
 	\caption{Results on 10 random LP problem of size $50 \times 300$ using standard preconditioning. }
 	\label{fig:base_p_d}
 \end{figure*}
-TODO: incomplete Cholesky figure here...
 
 \subsection*{Cholesky and Incomplete Cholesky Preconditioning}
+We then generated a random problem of size $100\times500$ and recorded the number of iterations required for various preconditioning approaches to converge. Figures \ref{fig:ichol_primal} and \ref{fig:ichol_dual} show the results of this experiment applied to \eqref{eq:LPR} and \eqref{eq:LDR}, respectively. We observe that Cholesky and incomplete Cholesky preconditioning have essentially the same convergence behavior as standard preconditioning (as long as the incomplete Cholesky drop tolerance is not set too high).
+
+We then tested the speed of the different preconditioning techniques. Figure \ref{fig:ichol_primal_speed} shows that the Cholesky preconditioning step is faster than that of standard preconditioning, but the incomplete Cholesky preconditioning step is even faster. However, in our experiments, nearly all of the computation time was spent inside the solvers. This may be due to the implementation of the solvers, which we intend to improve in our future work.
+
+\begin{figure*}[ht]
+	\centering
+	\includegraphics[width=1.0\textwidth]{../../experiments/incomplete_cholesky/ichol_droptol_conv_primal.png}
+	\caption{Comparison of preconditioning techniques for primal: not preconditioned, standard preconditioning, cholesky, and incomplete cholesky using 2 different drop tolerances. Size of $A$: $100 \times 500$.}
+	\label{fig:ichol_primal}
+\end{figure*}
+
+\begin{figure*}[ht]
+	\centering
+	\includegraphics[width=1.0\textwidth]{../../experiments/incomplete_cholesky/ichol_droptol_conv_dual.png}
+	\caption{Comparison of preconditioning techniques for dual: not preconditioned, standard preconditioning, cholesky, and incomplete cholesky using 2 different drop tolerances. Size of $A$: $100 \times 500$.}
+	\label{fig:ichol_dual}
+\end{figure*}
+
+\begin{figure*}[ht]
+	\centering
+	\includegraphics[height=0.5\textwidth]{../../experiments/incomplete_cholesky/ichol_speed_primal_various_A.png}
+	\caption{Preconditioning speed for primal LP. Left figure: Time required to perform preconditioning step. Right figure: Percentage of overall solver time spent on the preconditioning step.}
+	\label{fig:ichol_primal_speed}
+\end{figure*}
 
 \subsection*{SDP}
 
-
-The figures below (TODO: fig refs!!) show the behavior of the SDP primal and dual solvers on a problem with $m=30$, $n=10$, and various values of $\beta$.
+Finally, we randomly generated a problem of size $m=30$, $n=10$ and recorded the number of steps required for the SDP primal and SDP dual solvers to converge for various values of $\beta$. The results are shown in Figures \ref{fig:sdp_primal} and \ref{fig:sdp_dual}. The dashed lines correspond to $\beta$ values selected using the following rules:
+\begin{eqnarray*}
+\text{Primal:} & \beta=\text{trace}(A^{T}A)/n^{2}\\
+\text{Dual:} & \beta=\text{trace}(AA^{T})/n
+\end{eqnarray*}
 
 \begin{figure*}[ht]
 	\centering
@@ -362,26 +402,17 @@ The figures below (TODO: fig refs!!) show the behavior of the SDP primal and dua
 	\label{fig:sdp_dual}
 \end{figure*}
 
-Note that the dashed pink lines correspond to $\beta$ values selected
-using the following rules:
-\begin{eqnarray*}
-\text{Primal:} & \beta=\text{trace}(A^{T}A)/n^{2}\\
-\text{Dual:} & \beta=\text{trace}(AA^{T})/n
-\end{eqnarray*}
+We observe that the solvers are somewhat sensitive to $\beta$, especially for very small and very large values. 
 
-We observe that the solvers are somewhat sensitive to $\beta$, especially
-for very small and very large values. 
-
-\textbf{Note:} For the dual SDP, we tried updating $y$ and $S$ in
-different orders (i.e. $y$ first then $S$ and vice versa), but the
-differences with the above figure were negligible. This suggests that
-the $y$ and $S$ update order is not necessarily important.
+\textbf{Note:} For the dual SDP, we tried updating $y$ and $S$ in different orders (i.e. $y$ first then $S$ and vice versa), but the differences with the above figure were negligible. This suggests that the $y$ and $S$ update order is not necessarily important.
 
 
 \vspace{0.1in}
-\section{Conclusions}
+\section{Conclusions and Future Work}
 
-We evaluated the performance of several different versions of ADMM for linear and semidefinite programs. Our experiments show that one can split linear programs into blocks without significantly increasing the number of iterations required to find an optimal solution. However, one must be sure to apply preconditioning to the problem and/or use a randomly permuted update order. Since block splitting allows one to avoid a large matrix inversion, our results suggest that these techniques may reduce the overall runtime of ADMM algorithms. 
+We evaluated the performance of several variants of ADMM for linear and semidefinite programs. Our experiments show that one can split linear programs into blocks without significantly increasing the number of iterations required to find an optimal solution. However, one must be sure to apply preconditioning to the problem and/or use a randomly permuted update order. 
+
+In the future, we intend to run more experiments with the SDP solvers and try to find a robust rule to select $\beta$. We also plan to improve the speed of our LP solver implementations. If the solvers ran faster, then preconditioning could lead to more significant performance benefits.
 
 \section{Acknowledgements}
 
@@ -400,7 +431,7 @@ Using the 1st order gradient condition
 \nabla_{\mathbf{x}_{1}}L^{P}(\mathbf{x}_{1},\mathbf{x}_{2},\mathbf{y}, \mathbf{s})=\mathbf{c}-A^{T}\mathbf{y}-\mathbf{s}+\beta\left(A^{T}\left(A\mathbf{x}_{1}-\mathbf{b}\right)+\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)\right) = \mathbf{0}
 \]
 we obtain the update step for $\mathbf{x}_{1}$
-\begin{align}\label{eq:x1_primal_update}
+\begin{align}\label{eq:x1_primal_update_app}
 \mathbf{x}_{1}^{k+1} = \left(A^{T}A+I\right)^{-1}\left(\frac{1}{\beta}A^{T}\mathbf{y}^k+\frac{1}{\beta}\mathbf{s}^k-\frac{1}{\beta}\mathbf{c}+A^{T}\mathbf{b}^k+\mathbf{x}_{2}^k\right)
 \end{align}
 Similarly, we solve
@@ -412,37 +443,36 @@ to obtain the update for $\mathbf{x}_{2}$. Since the elements of $\mathbf{x}_{2}
 {x}_{2,j}^{k+1} = \max\left\{ {x}_{1,j}^{k+1}-\frac{1}{\beta}{s}_j^k,0\right\} \text{ for $j = 1,..,n$}.
 \end{align}
 Next, we update the multipliers $\mathbf{y}$ and $\mathbf{s}$ using steepest ascent:
-\begin{align}\label{eq:y_primal_update}
+\begin{align}\label{eq:y_primal_update_app}
 \mathbf{y}^{k+1} &= \mathbf{y}^{k} + \beta (A \mathbf{x}_1^{k+1}  - \mathbf{b}) 
 \end{align}
-\begin{align}\label{eq:s_primal_update}
+\begin{align}\label{eq:s_primal_update_app}
 \mathbf{s}^{k+1} &= \mathbf{s}^{k}  - \beta  (\mathbf{x}_1^{k+1}  -\mathbf{x}_2^{k+1} )
 \end{align}
 
 
 %%%%%%%%%%
 \subsection*{LP Dual Update Derivation}
-Similar to the primal updates, we update $\mathbf{y}$ and $\mathbf{s}$ according to 
+To solve \eqref{eq:LDR}, we update $\mathbf{y}$ and $\mathbf{s}$ sequentially using:
 \begin{align}
 \mathbf{y}^{k+1} & = \arg \min_{\mathbf{y}} L^{d}(\mathbf{y}^{k},\mathbf{s}^k, \mathbf{x}^{k}),\\
 \mathbf{s}^{k+1} & = \arg \min_{\mathbf{s} \geq 0} L^{d}(\mathbf{y}^{k+1},\mathbf{s}^k,\mathbf{x}^{k}).
 \end{align}
 Using the 1st order gradient conditions
 \begin{align}
-\nabla_{\mathbf{y}}L^{d}(\mathbf{y},\mathbf{s},\mathbf{x}) & =  -\mathbf{b}-A\mathbf{x}+\beta A\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right)  = \mathbf{0}, \label{eq:dual_y} \\
+\nabla_{\mathbf{y}}L^{d}(\mathbf{y},\mathbf{s},\mathbf{x}) & =  -\mathbf{b}-A\mathbf{x}+\beta A\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right)  = \mathbf{0}, \label{eq:dual_y_app} \\
 \nabla_{\mathbf{s}}L^{d}(\mathbf{y},\mathbf{s},\mathbf{x}) & =  -\mathbf{x}+\beta\left(A^{T}\mathbf{y}+\mathbf{s}-\mathbf{c}\right) =  \mathbf{0},
 \end{align}
 we have the updates for $\mathbf{y}$ and $\mathbf{s}$:
-\begin{align}\label{eq:y_dual_update}
+\begin{align}\label{eq:y_dual_update_app}
 \mathbf{y}^{k+1} = \left(AA^{T}\right)^{-1}\left(\frac{1}{\beta}\left(A\mathbf{x}^{k}+\mathbf{b}\right)-A\mathbf{s}^{k}+A\mathbf{c}\right),
 \end{align}
-\begin{align}\label{eq:s_dual_update}
+\begin{align}\label{eq:s_dual_update_app}
 s_j^{k+1} = \max\left\{ \frac{1}{\beta}{x}_j^k-(A^{T}\mathbf{y}^{k+1})_j+{c}_j,0\right\}  \text{ for $j = 1,..,n$}.
 \end{align}
 
-\subsection*{Primal ADMM with Block Splitting (B=2 Blocks)}
-
-To help make our derivations concrete, we first consider splitting the problem into $B=2$ blocks of equal size as follows:
+\subsection*{Primal ADMM with Block Splitting Derivation (B=2 Blocks)}
+Here, we derive the update for the primal ADMM with block splitting. To help make our derivations concrete, we first consider splitting the problem into $B=2$ blocks of equal size as follows:
 \[
 \mathbf{x}_{1}=\begin{bmatrix}\mathbf{x}_{1,1}\\
 \mathbf{x}_{1,2}
@@ -472,10 +502,10 @@ is:
 \[
 \mathbf{x}_{1,2}^{k+1}=\left(A_{2}^{T}A_{2}+I\right)^{-1}\left(\frac{1}{\beta}A_{2}^{T}\mathbf{y}+\frac{1}{\beta}\mathbf{s}_{2}-\frac{1}{\beta}\mathbf{c}_{2}+A_{2}^{T}\mathbf{b}+\mathbf{x}_{2,2}^{k}-A_{2}^{T}A_{1}\mathbf{x}_{1,1}^{k+1}\right)
 \]
-Note that here we use $\mathbf{x}_{1,1}^{k+1}$ to update $\mathbf{x}_{1,2}$. Our results show that when $B>2$ blocks, one may need to randomly permute the update order. As a result, on some iterations, we may first update $\mathbf{x}_{1,2}$, then use the new value to update $\mathbf{x}_{1,1}$. 
+Note that here we use $\mathbf{x}_{1,1}^{k+1}$ to update $\mathbf{x}_{1,2}$. Our results show that when $B>2$ blocks, one may need to randomly permute the update order. As a result, on some iterations, we may first update $\mathbf{x}_{1,2}$, then use the new value to update $\mathbf{x}_{1,1}$. One can easily extend the above derivation to a general number of blocks.  
 
 
-\subsection*{Dual ADMM with Block Splitting (B=2 Blocks)}
+\subsection*{Dual ADMM with Block Splitting Derivation (B=2 Blocks)}
 Now, we derive the corresponding update for the dual ADMM with block splitting. Again, we first consider the $B=2$ case and split the problem into 2 blocks of equal size:
 
 \[
@@ -518,29 +548,25 @@ By symmetry, the update for $\mathbf{y}_{2}$ is:
 \]
 
 
-assuming that we update $\mathbf{y}_{2}$ after $\mathbf{y}_{1}$. As in the primal case, we may need to randomly permute the update order at each iteration.
-Note: we can easily extend the above result to a general number of blocks. 
+assuming that we update $\mathbf{y}_{2}$ after $\mathbf{y}_{1}$. As in the primal case, we may need to randomly permute the update order at each iteration. One can easily extend the above derivation to a general number of blocks. 
 
 
 { \subsection*{Using Preconditioning for Dual Block Splitting}
-When preconditioning is applied to the dual LP problem (whether or not implemented with the interior point method), the variables $\mathbf{y}$ become separable. To see this, consider \eqref{eq:dual_y}, where the coefficient of $\mathbf{y}$ is $A A^T$. When standard preconditioning is applied, we have
+When preconditioning is applied to the dual LP problem (whether or not implemented with the interior point method), the variables $\mathbf{y}$ become separable. To see this, consider \eqref{eq:dual_y_app}, where the coefficient of $\mathbf{y}$ is $A A^T$. When standard preconditioning is applied, we have
 \[
 A' (A')^T  = (AA^T )^{-1/2}A A^T (AA^T )^{-1/2} =  (AA^T )^{-1/2}(AA^T )^{1/2} (AA^T )^{1/2} (AA^T )^{-1/2}  = I.
 \]
-Therefore, the variables in $\mathbf{y}$ become separable and block-splitting produces the same result as non-block-splitting. This explains the dual Experiments, where the number of iterations required by the dual is independent of the number of blocks when preconditioning is applied.
+Therefore, the variables in $\mathbf{y}$ become separable and block-splitting produces the same result as non-block-splitting. This explains the dual experiments, where the number of iterations required by the dual is independent of the number of blocks when preconditioning is applied.
 
 
 \subsection*{Derivation of Updates for ADMM SDP Primal}
+1st order gradient condition for $X_{1}$:
 \[
-\nabla_{X_{1}}L=C-\mathcal{A}^{T}y-Z+\beta\mathcal{A}^{T}\left(\mathcal{A}X_{1}-b\right)+\beta\left(X_{1}-X_{2}\right)
+\nabla_{X_{1}}L=C-\mathcal{A}^{T}y-Z+\beta\mathcal{A}^{T}\left(\mathcal{A}X_{1}-b\right)+\beta\left(X_{1}-X_{2}\right)=\mathbf{0}
 \]
 where 
 \[
 \mathcal{A}^{T}y=\sum_{i=1}^{m}y_{i}A_{i}
-\]
-1st order condition for $X_{1}$:
-\[
-C-\mathcal{A}^{T}y-Z+\beta\mathcal{A}^{T}\left(\mathcal{A}X_{1}-b\right)+\beta\left(X_{1}-X_{2}\right)=0
 \]
 $X_{1}$ update:
 \[
@@ -548,18 +574,13 @@ X_{1}=\left(\mathcal{A}^{T}\mathcal{A}+I\right)^{-1}\left(X_{2}+\frac{1}{\beta}\
 \]
 1st order condition for $X_{2}$:
 \[
-\nabla_{X_{2}}L=-Z-\beta\left(X_{1}-X_{2}\right)
+\nabla_{X_{2}}L=-Z-\beta\left(X_{1}-X_{2}\right)=\mathbf{0}
 \]
-The $X_{2}$ update uses this 1st order condition and enforces the
-PSD requirement:
+The $X_{2}$ update uses this 1st order condition and enforces the PSD requirement:
 \[
 X_{2} = \max\{0,-\frac{Z}{\beta}-X_{1}\}
 \]
-Here, the operation $\max\{0,M\}$ means to set any negative eigenvalues
-of $M$ to 0. In particular, consider the eigendecomposition of $M$:
-$M=VDV^{-1}$. We compute $\hat{D}=max\{0,D\}$ (this max is computed
-element-wise), then set $X_{2}=V\hat{D}V^{-1}$.
-
+The operation $\max\{0,M\}$ was defined previously.
 
 \subsection*{Derivation of Updates for ADMM SDP Dual}
 The 1st order gradient condition for \textbf{$y$}
@@ -578,7 +599,7 @@ leads to the $S$ update (which must enforce the PSD constraint):
 \[
 S=\max\left\{ 0,\frac{1}{\beta}X+C-\mathcal{A}^{T}y\right\} 
 \]
-
+Again, the operation $\max\{0,M\}$ was defined previously.
 
 \newpage
 \vspace{0.4in}

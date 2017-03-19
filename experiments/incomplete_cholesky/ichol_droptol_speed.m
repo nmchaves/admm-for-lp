@@ -1,16 +1,17 @@
 clear;clc;close all
-prob_seed = 0;
 solver_seed = 0;
 
 %% Specify which problem sizes and preconditioners to use
 
 problem_sizes = [
-    [10, 100]; ...
-    [50, 500]; ...
+    [100, 500]; ...
     [100, 1000]; ...
+    [200, 1000]; ...
+    [200, 2000]; ...
+    [200, 10000];
 ];
 
-n_problems = length(problem_sizes);
+n_problems = size(problem_sizes,1);
 matlab_solver_times = zeros(n_problems, 1);
 
 preconditioners = [
@@ -18,8 +19,9 @@ preconditioners = [
     Preconditioner('standard', struct()), ...
     Preconditioner('ichol', struct('type', 'nofill')), ...
     Preconditioner('ichol', struct('type', 'ict', 'droptol', 1e-3)), ...
-    Preconditioner('ichol', struct('type', 'ict', 'droptol', 0.01))
+    Preconditioner('ichol', struct('type', 'ict', 'droptol', 0.1))
 ];
+
 n_precond = length(preconditioners);
 precond_times = zeros(n_problems, n_precond);
 solver_times = zeros(n_problems, n_precond);
@@ -37,12 +39,13 @@ beta = 0.9;     % parameter (for augmenting lagrangian)
 gamma = -1; % don't use interior point
 
 corr_tol = 0.01; % Tolerance for correctness
-num_blocks_range = [1]; %, 15, 20 % # of blocks to use for each splitting experiment
+num_blocks_range = [1, 5, 10]; %, 15, 20 % # of blocks to use for each splitting experiment
 rnd_perm = true;
 verb = true;
 
 %% Solve Problems and Measure Time
 for prob_idx = 1:n_problems
+    prob_seed = prob_idx-1;
     prob_size = problem_sizes(prob_idx,:);
     m = prob_size(1);
     n = prob_size(2);
@@ -54,23 +57,24 @@ for prob_idx = 1:n_problems
 
     [c, A, b, ov, solv_time] = generate_linprog_problem(m, n , prob_seed, true);
     matlab_solver_times(prob_idx) = solv_time;
-    
+
     for prec_idx = 1:n_precond
         precond = preconditioners(prec_idx);
         
-        num_blocks = 1;
+        num_blocks = 5;
         
         tic;
         [A_pre, b_pre] = precond.apply(A, b);
         precond_times(prob_idx, prec_idx) = toc;
         
         if prec_idx == precond_solv_idx
-        else
+             
             tic;
-            lp_dual(c, A_pre, b_pre, MAX_ITER, TOL, ...
+            lp_primal(c, A_pre, b_pre, MAX_ITER, TOL, ...
                     beta, gamma, num_blocks, rnd_perm, solver_seed, verb);
         
             precond_solver_times(prob_idx) = toc;
+            
         end
         
     end
@@ -138,15 +142,8 @@ set(gca,'xtick',1:n_problems);
 set(gca,'xticklabel', xtick_labels);
 set(gca, 'xticklabelrotation', 30);
 
-%% todo: show 2 figures
-%% fig a: precond time as pct of total exec time for
-% each method for various problem sizes
 
-%% fig b: 
-% show abs exec tuime for each method for various
-% problme sizes
-
-
+%% Below this is old code...
 
 %% generate problem
 m = 400;
