@@ -56,13 +56,13 @@ The alternating direction method of multipliers (ADMM) is a 1st order optimizati
 Linear Programming Primal:
 \begin{align}
 \min_{\mathbf{x}} &\quad \mathbf{c}^T\mathbf{x} \tag{LP}\label{eq:LP} \\
-\text{subject to } &\quad  A \mathbf{x} = \mathbf{b},  \nonumber \\
+\text{s.t.} &\quad  A \mathbf{x} = \mathbf{b},  \nonumber \\
 &\quad \mathbf{x} \geq \mathbf{0} \nonumber 
 \end{align}
 Linear Programming Dual:
 \begin{align}
 \max_{\mathbf{y}, \mathbf{s}} &\quad \mathbf{b}^T\mathbf{y}  \tag{LD}\label{eq:LD} \\
-\text{subject to } &\quad  A^T \mathbf{y}  + \mathbf{s} = \mathbf{c},  \nonumber \\
+\text{s.t.} &\quad  A^T \mathbf{y}  + \mathbf{s} = \mathbf{c},  \nonumber \\
 &\quad \mathbf{s} \geq \mathbf{0} \nonumber.
 \end{align}
 SDP Primal:
@@ -85,7 +85,7 @@ For \eqref{eq:LP} and \eqref{eq:LD}, we also experimented with block splitting, 
 In this section, we describe the ADMM update procedures for solving \eqref{eq:LP} and \eqref{eq:LD}.
 
 \subsection*{Primal Update}
-We re-formulate the primal LP problem as:
+We reformulate the primal LP problem as:
 \begin{align}
 \text{minimize}_{ \mathbf{x}_{1}, \mathbf{x}_{2}} &\quad \mathbf{c}^T\mathbf{x}_1 \tag{LPR}\label{eq:LPR} \\
 \text{subject to  \ \  } &\quad  A \mathbf{x}_{1} = \mathbf{b},  \nonumber \\
@@ -253,7 +253,7 @@ To apply ``standard" preconditioning to a linear programming problem, one first 
 \begin{align}
 A' = (AA^T )^{-1/2}A , \quad \quad \mathbf{b}' =(AA^T )^{-1/2}\mathbf{b}
 \end{align}
-and then substitutes $A'$ and $\mathbf{b}'$ for $A$ and $\mathbf{b}$ in the original problems \eqref{eq:LP} and \eqref{eq:LD}. Clearly, this re-formulation does not change the feasible regions for  \eqref{eq:LP} or \eqref{eq:LD}. 
+and then substitutes $A'$ and $\mathbf{b}'$ for $A$ and $\mathbf{b}$ in the original problems \eqref{eq:LP} and \eqref{eq:LD}. Clearly, this reformulation does not change the feasible regions for  \eqref{eq:LP} or \eqref{eq:LD}. 
 
 \subsection*{Cholesky Preconditioning}
 We  can also precondition the system using a Cholesky factorization:
@@ -344,7 +344,7 @@ These results suggest that one should prefer to use the maximum number of blocks
 
 \subsection*{Preconditioning with no Block-Splitting}
 
-We also studied the effect of preconditioning (without block-splitting) on the convergence rate of the basic primal and dual ADMM algorithms applied to \eqref{eq:LPR} and \eqref{eq:LDR}. We generated 10 random problems of size $50 \times 300$ and recorded the number of iterations required to converge as a function of $\beta$. The results  are shown in Figure \ref{fig:base_p_d}. We observe that all of the ADMM approaches are relatively insensitive to $\beta$.
+We also studied the effect of preconditioning (without block-splitting) on the convergence rate of the basic primal and dual ADMM algorithms applied to \eqref{eq:LPR} and \eqref{eq:LDR}. We generated 10 random problems of size $50 \times 300$ and recorded the number of iterations required to converge as a function of $\beta$. The results are shown in Figure \ref{fig:base_p_d}. We observe that all of the ADMM approaches are relatively insensitive to $\beta$.
 
 \begin{figure*}[ht]
 	\centering
