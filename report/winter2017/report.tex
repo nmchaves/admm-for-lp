@@ -312,7 +312,6 @@ The $X$ update is similar to the LP case: $X^{k+1}=X^{k}-\beta\left(\mathcal{A}^
 
 We evaluated the performance of the different ADMM approaches by generating random problems and recording the number of iterations needed to converge.
 
-\newpage
 \subsection*{Baseline Block-splitting (No Random Permutation, No Preconditioning)}
 To establish a baseline, we evaluated the ADMM solvers using sequential updating (i.e. we did not randomly permute the block update order) and without using preconditioning. The results of this experiment are shown in Figure \ref{fig:nop_nor}. $B$ represents the number of blocks ($B=1$ indicates that no splitting was performed). Note that when $B>2$, the problem does not necessarily converge. As we will see in the following experiments, we can improve performance by introducing random permutations or preconditioning.
 
@@ -405,7 +404,6 @@ Finally, we randomly generated a problem of size $m=30$, $n=10$ and recorded the
 We observe that the solvers are somewhat sensitive to $\beta$, especially for very small and very large values. 
 
 \textbf{Note:} For the dual SDP, we tried updating $y$ and $S$ in different orders (i.e. $y$ first then $S$ and vice versa), but the differences with the above figure were negligible. This suggests that the $y$ and $S$ update order is not necessarily important.
-
 
 \vspace{0.1in}
 \section{Conclusions and Future Work}
